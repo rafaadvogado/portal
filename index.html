@@ -73,7 +73,7 @@ footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px
 <span>WhatsApp</span></a>
 <script>
 /* ---------- estatística de visitas (Umami: sem cookies, sem dados pessoais) ---------- */
-const UMAMI_ID = '';
+const UMAMI_ID = 'e1ed7d73-fa33-4e80-996a-a7cae57abea0';
 function rastrear(ev, dados) { try { if (window.umami) ev ? umami.track(ev, dados) : umami.track(p => ({ ...p, url: '/' + (location.hash || '#inicio').split('/')[0], title: document.title })) } catch (e) { } }
 if (UMAMI_ID) { const s = document.createElement('script'); s.defer = true; s.src = 'https://cloud.umami.is/script.js'; s.dataset.websiteId = UMAMI_ID; s.dataset.autoTrack = 'false'; s.onload = () => rastrear(); document.head.appendChild(s) }
 document.addEventListener('click', e => {
