@@ -72,6 +72,18 @@ footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px
 <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><circle cx="8" cy="11" r="1.4" fill="#1f9d55"/><circle cx="12" cy="11" r="1.4" fill="#1f9d55"/><circle cx="16" cy="11" r="1.4" fill="#1f9d55"/></svg>
 <span>WhatsApp</span></a>
 <script>
+/* ---------- estatística de visitas (Umami: sem cookies, sem dados pessoais) ---------- */
+const UMAMI_ID = '';
+function rastrear(ev, dados) { try { if (window.umami) ev ? umami.track(ev, dados) : umami.track(p => ({ ...p, url: '/' + (location.hash || '#inicio').split('/')[0], title: document.title })) } catch (e) { } }
+if (UMAMI_ID) { const s = document.createElement('script'); s.defer = true; s.src = 'https://cloud.umami.is/script.js'; s.dataset.websiteId = UMAMI_ID; s.dataset.autoTrack = 'false'; s.onload = () => rastrear(); document.head.appendChild(s) }
+document.addEventListener('click', e => {
+  const a = e.target.closest('a'); if (!a) return; const h = a.getAttribute('href') || '';
+  const local = (location.hash || '#inicio').slice(1).split('/')[0] + (a.id === 'fab' ? '-botao-flutuante' : '');
+  if (h.includes('wa.me')) rastrear('whatsapp', { local });
+  else if (h.startsWith('mailto:')) rastrear('email', { local });
+  else if (a.closest('.post')) rastrear('noticia-fonte', { url: h });
+  else if (/^https?:/.test(h) && !h.includes(location.host)) rastrear('link-externo', { url: h });
+}, true);
 const ME = { nome: 'Rafael de Mello Souza', oab: 'OAB/SP nº 352.797', tel: '(14) 99611-9228', wa: '5514996119228', email: 'rafaelmsouza@adv.oabsp.org.br' };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -140,8 +152,8 @@ function telaConsulta(erro) {
     b.disabled = true; b.innerHTML = '<span class="spin"></span> Consultando…'; m.className = 'msg';
     try {
       const p = await abrir(num.value, cpf.value, $('#sen').value);
-      if (!p) { telaConsulta('Não encontramos um processo com esses dados. Confira o número, o CPF e a senha, ou fale comigo no WhatsApp.'); return }
-      telaProcesso(p);
+      if (!p) { rastrear('consulta-nao-encontrado'); telaConsulta('Não encontramos um processo com esses dados. Confira o número, o CPF e a senha, ou fale comigo no WhatsApp.'); return }
+      rastrear('consulta-ok'); telaProcesso(p);
     } catch (err) { telaConsulta('Não foi possível consultar agora (' + err.message + '). Tente de novo em instantes.') }
   };
 }
@@ -171,10 +183,12 @@ function telaProcesso(p) {
 
 /* ---------- contato ---------- */
 function vcard() {
+  rastrear('salvar-contato');
   const v = ['BEGIN:VCARD', 'VERSION:3.0', 'N:Souza;Rafael de Mello;;;', 'FN:' + ME.nome, 'TITLE:Advogado – ' + ME.oab, 'TEL;TYPE=CELL:+' + ME.wa, 'EMAIL;TYPE=WORK:' + ME.email, 'URL:' + location.origin, 'END:VCARD'].join('\r\n');
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([v], { type: 'text/vcard' })); a.download = 'rafael-de-mello-souza.vcf'; a.click();
 }
 async function compartilhar() {
+  rastrear('compartilhar');
   const d = { title: 'Rafael de Mello Souza – Advogado', text: `${ME.nome} – Advogado, ${ME.oab}. WhatsApp ${ME.tel}`, url: location.origin + location.pathname };
   try { if (navigator.share) { await navigator.share(d); return } } catch (e) { if (e.name === 'AbortError') return }
   try { await navigator.clipboard.writeText(d.url); alert('Link copiado.') } catch (e) { prompt('Copie o link:', d.url) }
@@ -223,6 +237,7 @@ async function telaNoticias(id) {
   if (id) { const e = document.getElementById('n-' + id); e && e.scrollIntoView() }
 }
 function rota() {
+  setTimeout(() => rastrear(), 0);
   const h = (location.hash || '#inicio').slice(1), [r, arg] = h.split('/');
   document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + r));
   if (r === 'consulta') telaConsulta();
