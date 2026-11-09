@@ -97,7 +97,7 @@ function setFab(t) { $('#fab').href = waLink(t) }
 const MSG_PADRAO = 'Olá, Dr. Rafael! Vim pelo seu site e gostaria de falar com você.';
 
 /* ---------- criptografia (igual ao gerador do ERMS – versão 2: CPF + senha) ---------- */
-const WORKER_URL = '';   // endereço do intermediário (Cloudflare) que recebe os cadastros
+const WORKER_URL = 'https://erms-site.p68zfdv7j2.workers.dev';   // endereço do intermediário (Cloudflare) que recebe os cadastros
 const ITER = 200000, te = new TextEncoder();
 const ub = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 const b64 = u => btoa(String.fromCharCode(...u));
