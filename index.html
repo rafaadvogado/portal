@@ -155,7 +155,7 @@ function telaConsulta(erro) {
     try {
       const c = await abrir(cpf, sen);
       if (!c) { rastrear('consulta-nao-encontrado'); telaConsulta('CPF ou senha não conferem, ou o seu cadastro ainda está em análise. Se precisar, fale comigo no WhatsApp.'); return }
-      rastrear('consulta-ok'); c.processos = (c.processos || []).filter(p => p.ativo); CLIENTE = c;
+      rastrear('consulta-ok'); c.processos = (c.processos || []).filter(p => p.ativo); c.processos.forEach(p => { if (/base p[uú]blica|n[aã]o localizad|datajud|consultar no site do tribunal/i.test(p.resumo || '')) p.resumo = '' }); CLIENTE = c;
       c.processos.length === 1 ? telaProcesso(0) : telaLista();
     } catch (err) { telaConsulta('Não foi possível entrar agora (' + err.message + '). Tente de novo em instantes.') }
   };
