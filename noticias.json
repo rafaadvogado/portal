@@ -1,5 +1,18 @@
 [
- {"id":"2026-11-08-calendario-novembro","data":"2026-11-08","titulo":"INSS: pagamentos de novembro começam no dia 24",
-  "texto":"Os benefícios referentes a novembro começam a ser pagos em 24/11 para quem recebe até um salário mínimo e em 1º/12 para quem recebe acima disso. Os depósitos vão até 7 de dezembro, conforme o final do número do benefício.\nQuem começou a receber benefício a partir de maio e não entrou na antecipação do 13º terá o abono pago junto com a folha de novembro, de forma proporcional. BPC/LOAS não dá direito ao 13º. Confira a sua data no aplicativo Meu INSS.",
-  "fonte":"https://www.c6bank.com.br/blog/calendario-inss-novembro-2026","fonteNome":"C6 Bank – Calendário INSS novembro 2026"}
+  {
+    "id": "2026-11-09-inss-biometria-bloqueio-falso",
+    "data": "2026-11-09",
+    "titulo": "INSS: é falso que benefício será bloqueado sem biometria em novembro",
+    "texto": "Circulam mensagens dizendo que aposentadorias e pensões serão bloqueadas em 20 de novembro por falta de biometria. O INSS informa que não existe prazo geral desse tipo: a biometria é exigida nos novos pedidos feitos desde 21 de novembro de 2025, com exceções.\nO cadastro não é feito em agência: os dados vêm de documentos como a nova identidade (CIN), a CNH ou o título de eleitor. O INSS não pede senhas, dados bancários nem transferências. Na dúvida, consulte o Meu INSS ou ligue 135.",
+    "fonte": "https://agenciabrasil.ebc.com.br/geral/noticia/2026-10/inss-alerta-para-golpes-que-usam-informacao-falsa-sobre-biometria",
+    "fonteNome": "Agência Brasil – INSS alerta para golpes sobre biometria"
+  },
+  {
+    "id": "2026-11-08-calendario-novembro",
+    "data": "2026-11-08",
+    "titulo": "INSS: pagamentos de novembro começam no dia 24",
+    "texto": "Os benefícios referentes a novembro começam a ser pagos em 24/11 para quem recebe até um salário mínimo e em 1º/12 para quem recebe acima disso. Os depósitos vão até 7 de dezembro, conforme o final do número do benefício.\nQuem começou a receber benefício a partir de maio e não entrou na antecipação do 13º terá o abono pago junto com a folha de novembro, de forma proporcional. BPC/LOAS não dá direito ao 13º. Confira a sua data no aplicativo Meu INSS.",
+    "fonte": "https://www.c6bank.com.br/blog/calendario-inss-novembro-2026",
+    "fonteNome": "C6 Bank – Calendário INSS novembro 2026"
+  }
 ]
