@@ -40,7 +40,7 @@ def cab(titulo, desc, url, extra=''):
 <nav><a href="/#inicio">Início</a><a href="/#quem-somos">Quem somos</a><a href="/noticias/">Notícias</a><a href="/#consulta">Consultar processo</a></nav><main>"""
 
 
-ROD = f"""</main><footer>Rafael de Mello Souza · Advogado · OAB/SP nº 352.797<br>© 2026 Rafael de Mello Souza – Advocacia. Todos os direitos reservados.<br>Conteúdo informativo, não constitui consultoria jurídica. Cada caso tem particularidades. · <a href="/privacidade.html">Privacidade</a></footer></body></html>"""
+ROD = f"""</main><footer>Rafael de Mello Souza · Advogado · OAB/SP nº 352.797<br>© 2026 Rafael de Mello Souza – Advocacia. Todos os direitos reservados.<br>Site e sistema desenvolvidos por Rafael de Mello Souza.<br>Conteúdo informativo, não constitui consultoria jurídica. Cada caso tem particularidades. · <a href="/privacidade.html">Privacidade</a></footer></body></html>"""
 
 
 def resumo(t, n=155):
