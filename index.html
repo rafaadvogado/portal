@@ -207,7 +207,7 @@ const cartaoHtml = () => `<div class="card"><h2>Meu cartão</h2>
   <div class="acts"><a class="btn wa" href="${waLink(MSG_PADRAO)}" target="_blank" rel="noopener">💬 Falar no WhatsApp</a><button onclick="vcard()">👤 Salvar contato</button><a class="btn" href="mailto:${ME.email}">✉️ E-mail</a><button onclick="compartilhar()">📤 Compartilhar</button></div></div>`;
 let NOTICIAS = null;
 async function noticias() { if (NOTICIAS) return NOTICIAS; try { NOTICIAS = (await (await fetch('noticias.json', { cache: 'no-cache' })).json()).sort((a, b) => b.data.localeCompare(a.data)) } catch (e) { NOTICIAS = [] } return NOTICIAS }
-const postHtml = n => `<div class="post" id="n-${esc(n.id)}"><div class="d">${fd(n.data)}</div><h3>${esc(n.titulo)}</h3>${String(n.texto).split(/\n+/).map(t => `<p>${esc(t)}</p>`).join('')}${n.fonte ? `<div class="sub">Fonte: <a href="${esc(n.fonte)}" target="_blank" rel="noopener">${esc(n.fonteNome || 'link')}</a></div>` : ''}</div>`;
+const postHtml = n => `<div class="post" id="n-${esc(n.id)}"><div class="d">${fd(n.data)}</div><h3>${esc(n.titulo)}</h3>${String(n.texto).split(/\n+/).map(t => `<p>${esc(t)}</p>`).join('')}<div class="sub"><a href="noticias/${encodeURIComponent(n.id)}.html">Abrir a notícia em página própria (para compartilhar) →</a></div>${n.fonte ? `<div class="sub">Fonte: <a href="${esc(n.fonte)}" target="_blank" rel="noopener">${esc(n.fonteNome || 'link')}</a></div>` : ''}</div>`;
 async function telaInicioSite() {
   setFab(MSG_PADRAO);
   const ns = (await noticias()).slice(0, 3);
