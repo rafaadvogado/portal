@@ -154,7 +154,7 @@ function telaConsulta(erro) {
     try {
       const c = await abrir(cpf, sen);
       if (!c) { rastrear('consulta-nao-encontrado'); telaConsulta('CPF ou senha não conferem, ou o seu cadastro ainda está em análise. Se precisar, fale comigo no WhatsApp.'); return }
-      rastrear('consulta-ok'); CLIENTE = c;
+      rastrear('consulta-ok'); c.processos = (c.processos || []).filter(p => p.ativo); CLIENTE = c;
       c.processos.length === 1 ? telaProcesso(0) : telaLista();
     } catch (err) { telaConsulta('Não foi possível entrar agora (' + err.message + '). Tente de novo em instantes.') }
   };
@@ -162,7 +162,7 @@ function telaConsulta(erro) {
 const primeiroNome = () => esc((CLIENTE?.cliente || '').split(' ')[0]);
 function telaLista() {
   setFab(`Olá, Dr. Rafael! Sou ${CLIENTE.cliente.split(' ')[0]}, seu cliente, e tenho uma dúvida:`);
-  $('#main').innerHTML = `<div class="card"><div class="sub">Olá, ${primeiroNome()}!</div><h1>Seus processos</h1><div class="sub">Toque no processo que deseja ver.</div>
+  $('#main').innerHTML = `<div class="card"><div class="sub">Olá, ${primeiroNome()}!</div><h1>Seus processos</h1><div class="sub">${CLIENTE.processos.length ? 'Toque no processo que deseja ver.' : 'Você não tem processos em andamento no momento. Se tiver alguma dúvida, fale comigo no WhatsApp.'}</div>
   ${CLIENTE.processos.map((p, i) => `<a class="proc" href="javascript:telaProcesso(${i})"><span class="tag ${p.ativo ? 'ok' : 'fim'}">${esc(p.situacaoCadastral)}</span><b>${esc(p.acao || 'Processo')}</b><span class="sub">${esc(p.numero)}${p.tribunal ? ' · ' + esc(p.tribunal) : ''}</span>${p.resumo ? `<span class="res">${esc(p.resumo.length > 140 ? p.resumo.slice(0, 140) + '…' : p.resumo)}</span>` : ''}</a>`).join('')}
   <p class="priv">Informações atualizadas em ${fd(CLIENTE.atualizado)}.</p></div><div class="acts"><button onclick="telaConsulta()">Sair</button></div>`;
   window.scrollTo(0, 0);
