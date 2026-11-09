@@ -112,9 +112,10 @@ async function chaveDe(cpf, senha) {   // {id, k}: o que o escritório recebe no
   const [id, k] = await Promise.all([pbkdf2(m, 'erms-portal-cli-v2', 128), pbkdf2(m, 'erms-portal-key-v2', 256)]);
   return { id: hex(id), k: b64(k), kb: k };
 }
+let FID = '';
 async function abrir(cpf, senha) {
   const { id, kb } = await chaveDe(cpf, senha);
-  let r = null;
+  FID = id; let r = null;
   if (WORKER_URL) { try { r = await fetch(WORKER_URL.replace(/\/$/, '') + '/c/' + id, { cache: 'no-store' }) } catch (e) { r = null } }
   if (!r || (r.status !== 200 && r.status !== 404)) r = await fetch('c/' + id + '.json', { cache: 'no-cache' });   // reserva: cópia diária
   if (r.status === 404) return null;
@@ -169,6 +170,7 @@ function telaLista() {
 }
 function telaProcesso(i) {
   const p = CLIENTE.processos[i];
+  if (WORKER_URL && FID && p.numero) fetch(WORKER_URL.replace(/\/$/, '') + '/v/' + FID + '/' + encodeURIComponent(p.numero), { cache: 'no-store' }).catch(() => { });
   setFab(`Olá, Dr. Rafael! Sou ${CLIENTE.cliente.split(' ')[0]}, cliente do processo ${p.numero}, e tenho uma dúvida:`);
   const st = p.ativo ? `<span class="tag ok">${esc(p.situacaoCadastral)}</span>` : `<span class="tag fim">${esc(p.situacaoCadastral)}</span>`;
   const I = (l, v, w) => v ? `<div class="${w ? 'w2' : ''}"><dt>${l}</dt><dd>${esc(v)}</dd></div>` : '';
