@@ -54,6 +54,8 @@ dt{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.5px
 .tl li:before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--sky);border:2px solid #fff}
 .tl li:last-child{border-left-color:transparent}
 .tl .d{font-size:13px;color:var(--mute);font-weight:600}
+.proc{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px}.proc b{display:block;color:var(--navy);margin:6px 0 2px}.proc .res{display:block;font-size:14px;margin-top:6px;color:var(--ink)}.proc:active{background:var(--paper)}
+select{width:100%;font-size:17px;padding:12px 14px;border:1px solid #cfd6e2;border-radius:10px;background:#fff;color:var(--ink)}
 .ag{background:#fff7e6;border:1px solid #f0d9a8;border-radius:10px;padding:10px 12px;margin-top:8px}
 .priv{font-size:13px;color:var(--mute);margin-top:14px}
 footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px}
@@ -66,7 +68,7 @@ footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px
 </head>
 <body>
 <header><img src="icon.png" alt=""><div><div class="n">Rafael de Mello Souza</div><div class="o">Advogado · OAB/SP 352.797</div></div></header>
-<nav id="nav"><a href="#inicio">Início</a><a href="#quem-somos">Quem somos</a><a href="#noticias">Notícias</a><a href="#consulta">Consultar processo</a></nav>
+<nav id="nav"><a href="#inicio">Início</a><a href="#quem-somos">Quem somos</a><a href="#noticias">Notícias</a><a href="#consulta">Área do cliente</a></nav>
 <main id="main"></main>
 <footer>Rafael de Mello Souza · Advogado · OAB/SP nº 352.797<br>© 2026 Rafael de Mello Souza – Advocacia. Todos os direitos reservados.<br>Conteúdo informativo, não constitui consultoria jurídica. Cada caso tem particularidades. · <a href="/privacidade.html">Privacidade</a><br><span id="atu"></span></footer>
 <a id="fab" target="_blank" rel="noopener" aria-label="Falar comigo no WhatsApp">
@@ -94,77 +96,85 @@ const waLink = t => `https://wa.me/${ME.wa}?text=${encodeURIComponent(t)}`;
 function setFab(t) { $('#fab').href = waLink(t) }
 const MSG_PADRAO = 'Olá, Dr. Rafael! Vim pelo seu site e gostaria de falar com você.';
 
-/* ---------- criptografia (igual ao gerador do ERMS) ---------- */
+/* ---------- criptografia (igual ao gerador do ERMS – versão 2: CPF + senha) ---------- */
+const WORKER_URL = '';   // endereço do intermediário (Cloudflare) que recebe os cadastros
 const ITER = 200000, te = new TextEncoder();
 const ub = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const b64 = u => btoa(String.fromCharCode(...u));
+const hex = u => [...u].map(b => b.toString(16).padStart(2, '0')).join('');
 async function pbkdf2(material, sal, bits) {
   const k = await crypto.subtle.importKey('raw', te.encode(material), 'PBKDF2', false, ['deriveBits']);
-  return new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: sal, iterations: ITER }, k, bits));
+  return new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: te.encode(sal), iterations: ITER }, k, bits));
 }
-async function abrir(numero, cpf, senha) {
-  const material = `${dig(numero)}|${dig(cpf)}|${senha.trim()}`;
-  const id = [...await pbkdf2(material, te.encode('erms-portal-id-v1'), 128)].map(b => b.toString(16).padStart(2, '0')).join('');
-  const r = await fetch('d/' + id + '.json', { cache: 'no-cache' });
+const materialDe = (cpf, senha) => `${dig(cpf)}|${senha}`;
+async function chaveDe(cpf, senha) {   // {id, k}: o que o escritório recebe no cadastro (nunca a senha)
+  const m = materialDe(cpf, senha);
+  const [id, k] = await Promise.all([pbkdf2(m, 'erms-portal-cli-v2', 128), pbkdf2(m, 'erms-portal-key-v2', 256)]);
+  return { id: hex(id), k: b64(k), kb: k };
+}
+async function abrir(cpf, senha) {
+  const { id, kb } = await chaveDe(cpf, senha);
+  let r = null;
+  if (WORKER_URL) { try { r = await fetch(WORKER_URL.replace(/\/$/, '') + '/c/' + id, { cache: 'no-store' }) } catch (e) { r = null } }
+  if (!r || (r.status !== 200 && r.status !== 404)) r = await fetch('c/' + id + '.json', { cache: 'no-cache' });   // reserva: cópia diária
   if (r.status === 404) return null;
   if (!r.ok) throw new Error('falha de conexão (' + r.status + ')');
   const f = await r.json();
-  const chave = await crypto.subtle.importKey('raw', await pbkdf2(material, ub(f.s), 256), 'AES-GCM', false, ['decrypt']);
-  const txt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: ub(f.iv) }, chave, ub(f.c));
-  return JSON.parse(new TextDecoder().decode(txt));
+  const chave = await crypto.subtle.importKey('raw', kb, 'AES-GCM', false, ['decrypt']);
+  return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: ub(f.iv) }, chave, ub(f.c))));
 }
+const cpfValido = c => { c = dig(c); if (c.length !== 11 || /^(\d)\1+$/.test(c)) return false; const dv = n => { let s = 0; for (let i = 0; i < n; i++) s += +c[i] * (n + 1 - i); const r = s * 10 % 11; return r === 10 ? 0 : r }; return dv(9) === +c[9] && dv(10) === +c[10] };
+const mascCPF = el => el.addEventListener('input', () => { const d = dig(el.value).slice(0, 11); el.value = d.length === 11 ? `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6, 9)}-${d.slice(9)}` : d });
 
-/* ---------- telas ---------- */
+/* ---------- telas da área do cliente ---------- */
+let CLIENTE = null;
 function telaConsulta(erro) {
-  setFab(MSG_PADRAO);
+  setFab(MSG_PADRAO); CLIENTE = null;
   $('#main').innerHTML = `
   <div class="card">
-    <h1>Consulte o seu processo</h1>
-    <div class="sub">Área exclusiva para clientes. Informe os dados abaixo para ver a situação e os últimos andamentos.</div>
+    <h1>Área do cliente</h1>
+    <div class="sub">Acompanhe os seus processos: situação, fase e últimos andamentos.</div>
     <form id="f" autocomplete="off">
-      <label for="num">Número do processo</label>
-      <input id="num" inputmode="numeric" placeholder="0000000-00.0000.0.00.0000" required>
-      <label for="cpf">CPF do cliente</label>
-      <input id="cpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="18" required>
+      <label for="cpf">CPF</label>
+      <input id="cpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14" required>
       <label for="sen">Senha</label>
-      <input id="sen" type="password" inputmode="numeric" placeholder="senha informada pelo escritório" required>
-      <button class="pri" id="ok" type="submit">Consultar</button>
+      <input id="sen" type="password" placeholder="sua senha" required>
+      <button class="pri" id="ok" type="submit">Entrar</button>
       <div id="msg" class="msg ${erro ? 'err' : ''}">${erro ? esc(erro) : ''}</div>
     </form>
-    <p class="priv">🔒 Os dados são protegidos por criptografia e só podem ser abertos com o número do processo, o CPF e a senha. Não sabe a senha? Fale comigo no WhatsApp.</p>
-  </div>
-  <div class="card" style="display:none">
-    <h2>Meu cartão</h2>
-    <img class="cartao" src="cartao.jpg" alt="Cartão de visita de Rafael de Mello Souza, advogado, OAB/SP 352.797, WhatsApp (14) 99611-9228, e-mail rafaelmsouza@adv.oabsp.org.br">
-    <div class="acts">
-      <a class="btn wa" href="${waLink(MSG_PADRAO)}" target="_blank" rel="noopener">💬 Falar no WhatsApp</a>
-      <button onclick="vcard()">👤 Salvar contato</button>
-      <a class="btn" href="mailto:${ME.email}">✉️ E-mail</a>
-      <button onclick="compartilhar()">📤 Compartilhar</button>
-    </div>
+    <div class="acts"><a class="btn" href="#cadastro">📝 Primeiro acesso? Cadastre-se</a><a class="btn" href="${waLink('Olá, Dr. Rafael! Esqueci a senha da área do cliente no site.')}" target="_blank" rel="noopener">🔑 Esqueci a senha</a></div>
+    <p class="priv">🔒 Os dados são protegidos por criptografia e só podem ser abertos com o seu CPF e a sua senha, que não são enviados nem guardados pelo site.</p>
   </div>`;
-  const num = $('#num'), cpf = $('#cpf');
-  num.addEventListener('input', () => { const d = dig(num.value).slice(0, 20); num.value = d.length === 20 ? `${d.slice(0, 7)}-${d.slice(7, 9)}.${d.slice(9, 13)}.${d[13]}.${d.slice(14, 16)}.${d.slice(16)}` : d });
-  cpf.addEventListener('input', () => { const d = dig(cpf.value).slice(0, 14); cpf.value = d.length === 11 ? `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6, 9)}-${d.slice(9)}` : d });
+  mascCPF($('#cpf'));
   $('#f').onsubmit = async e => {
     e.preventDefault();
-    const b = $('#ok'), m = $('#msg');
-    if (dig(num.value).length !== 20) { m.className = 'msg err'; m.textContent = 'Confira o número do processo: ele tem 20 dígitos.'; return }
-    if (![11, 14].includes(dig(cpf.value).length)) { m.className = 'msg err'; m.textContent = 'Confira o CPF (11 dígitos).'; return }
-    b.disabled = true; b.innerHTML = '<span class="spin"></span> Consultando…'; m.className = 'msg';
+    const b = $('#ok'), m = $('#msg'), cpf = $('#cpf').value, sen = $('#sen').value;
+    if (!cpfValido(cpf)) { m.className = 'msg err'; m.textContent = 'Confira o CPF.'; return }
+    b.disabled = true; b.innerHTML = '<span class="spin"></span> Entrando…'; m.className = 'msg';
     try {
-      const p = await abrir(num.value, cpf.value, $('#sen').value);
-      if (!p) { rastrear('consulta-nao-encontrado'); telaConsulta('Não encontramos um processo com esses dados. Confira o número, o CPF e a senha, ou fale comigo no WhatsApp.'); return }
-      rastrear('consulta-ok'); telaProcesso(p);
-    } catch (err) { telaConsulta('Não foi possível consultar agora (' + err.message + '). Tente de novo em instantes.') }
+      const c = await abrir(cpf, sen);
+      if (!c) { rastrear('consulta-nao-encontrado'); telaConsulta('CPF ou senha não conferem, ou o seu cadastro ainda está em análise. Se precisar, fale comigo no WhatsApp.'); return }
+      rastrear('consulta-ok'); CLIENTE = c;
+      c.processos.length === 1 ? telaProcesso(0) : telaLista();
+    } catch (err) { telaConsulta('Não foi possível entrar agora (' + err.message + '). Tente de novo em instantes.') }
   };
 }
-function telaProcesso(p) {
-  setFab(`Olá, Dr. Rafael! Sou ${p.cliente.split(' ')[0]}, cliente do processo ${p.numero}, e tenho uma dúvida:`);
+const primeiroNome = () => esc((CLIENTE?.cliente || '').split(' ')[0]);
+function telaLista() {
+  setFab(`Olá, Dr. Rafael! Sou ${CLIENTE.cliente.split(' ')[0]}, seu cliente, e tenho uma dúvida:`);
+  $('#main').innerHTML = `<div class="card"><div class="sub">Olá, ${primeiroNome()}!</div><h1>Seus processos</h1><div class="sub">Toque no processo que deseja ver.</div>
+  ${CLIENTE.processos.map((p, i) => `<a class="proc" href="javascript:telaProcesso(${i})"><span class="tag ${p.ativo ? 'ok' : 'fim'}">${esc(p.situacaoCadastral)}</span><b>${esc(p.acao || 'Processo')}</b><span class="sub">${esc(p.numero)}${p.tribunal ? ' · ' + esc(p.tribunal) : ''}</span>${p.resumo ? `<span class="res">${esc(p.resumo.length > 140 ? p.resumo.slice(0, 140) + '…' : p.resumo)}</span>` : ''}</a>`).join('')}
+  <p class="priv">Informações atualizadas em ${fd(CLIENTE.atualizado)}.</p></div><div class="acts"><button onclick="telaConsulta()">Sair</button></div>`;
+  window.scrollTo(0, 0);
+}
+function telaProcesso(i) {
+  const p = CLIENTE.processos[i];
+  setFab(`Olá, Dr. Rafael! Sou ${CLIENTE.cliente.split(' ')[0]}, cliente do processo ${p.numero}, e tenho uma dúvida:`);
   const st = p.ativo ? `<span class="tag ok">${esc(p.situacaoCadastral)}</span>` : `<span class="tag fim">${esc(p.situacaoCadastral)}</span>`;
   const I = (l, v, w) => v ? `<div class="${w ? 'w2' : ''}"><dt>${l}</dt><dd>${esc(v)}</dd></div>` : '';
   $('#main').innerHTML = `
   <div class="card">
-    <div class="sub">Olá, ${esc(p.cliente.split(' ')[0])}!</div>
+    <div class="sub">Olá, ${primeiroNome()}!</div>
     <h1>Seu processo</h1>
     <div style="margin-top:4px">${st}</div>
     <dl>${I('Número', p.numero, 1)}${I('Ação', p.acao, 1)}${I('Área', p.area)}${I('Tribunal', p.tribunal)}${I('Vara / órgão', p.vara)}${I('Comarca', p.comarca)}${I('Parte contrária', p.parteContraria, 1)}</dl>
@@ -173,13 +183,78 @@ function telaProcesso(p) {
   ${p.agenda.length ? `<div class="card"><h2>📅 Próximos compromissos</h2>${p.agenda.map(a => `<div class="ag"><b>${esc(a.tipo)} – ${fd(a.data)}${a.hora ? ' às ' + esc(a.hora) : ''}</b><br>${esc(a.titulo)}${a.local ? `<div class="sub">${esc(a.local)}</div>` : ''}</div>`).join('')}<p class="sub">Em caso de dúvida sobre o que levar ou como se preparar, fale comigo.</p></div>` : ''}
   <div class="card"><h2>Últimos andamentos</h2>
     ${p.andamentos.length ? `<ul class="tl">${p.andamentos.map(a => `<li><div class="d">${fd(a.data)}</div>${esc(a.texto)}</li>`).join('')}</ul>` : '<p class="sub">Ainda não há andamentos registrados para consulta.</p>'}
-    <p class="priv">Informações atualizadas em ${fd(p.atualizado)}. Elas resumem a movimentação do processo e não substituem a orientação do advogado.</p>
+    <p class="priv">Informações atualizadas em ${fd(CLIENTE.atualizado)}. Elas resumem a movimentação do processo e não substituem a orientação do advogado.</p>
   </div>
   <div class="acts">
-    <a class="btn wa" href="${waLink(`Olá, Dr. Rafael! Sou ${p.cliente.split(' ')[0]}, cliente do processo ${p.numero}, e tenho uma dúvida:`)}" target="_blank" rel="noopener">💬 Tirar dúvida no WhatsApp</a>
+    <a class="btn wa" href="${waLink(`Olá, Dr. Rafael! Sou ${CLIENTE.cliente.split(' ')[0]}, cliente do processo ${p.numero}, e tenho uma dúvida:`)}" target="_blank" rel="noopener">💬 Tirar dúvida no WhatsApp</a>
+    ${CLIENTE.processos.length > 1 ? '<button onclick="telaLista()">← Meus processos</button>' : ''}
     <button onclick="telaConsulta()">Sair</button>
   </div>`;
   window.scrollTo(0, 0);
+}
+
+/* ---------- cadastro do cliente (vai para aprovação no ERMS) ---------- */
+function telaCadastro() {
+  setFab('Olá, Dr. Rafael! Estou fazendo o cadastro no site e tenho uma dúvida.');
+  if (!WORKER_URL) { $('#main').innerHTML = `<div class="card"><h1>Cadastro</h1><p>O cadastro pelo site estará disponível em breve. Enquanto isso, fale comigo pelo WhatsApp.</p><a class="btn wa" href="${waLink('Olá, Dr. Rafael! Quero acesso à área do cliente.')}" target="_blank" rel="noopener">💬 Falar no WhatsApp</a></div>`; return }
+  const F = (id, l, t = 'text', a = '') => `<label for="${id}">${l}</label><input id="${id}" type="${t}" ${a}>`;
+  $('#main').innerHTML = `<div class="card"><h1>Cadastro do cliente</h1>
+  <div class="sub">Preencha os seus dados e crie a sua senha. O escritório confere o cadastro e libera o acesso em até 24 horas; você será avisado pelo WhatsApp.</div>
+  <form id="fc" autocomplete="on" novalidate>
+    ${F('c_nome', 'Nome completo *', 'text', 'autocomplete="name" required')}
+    ${F('c_cpf', 'CPF *', 'text', 'inputmode="numeric" maxlength="14" placeholder="000.000.000-00" required')}
+    ${F('c_nasc', 'Data de nascimento *', 'date', 'required')}
+    ${F('c_tel', 'WhatsApp (com DDD) *', 'tel', 'autocomplete="tel" placeholder="(00) 00000-0000" required')}
+    ${F('c_email', 'E-mail *', 'email', 'autocomplete="email" required')}
+    ${F('c_cep', 'CEP *', 'text', 'inputmode="numeric" maxlength="9" placeholder="00000-000" autocomplete="postal-code" required')}
+    ${F('c_rua', 'Rua / avenida *', 'text', 'autocomplete="address-line1" required')}
+    <div style="display:flex;gap:10px"><div style="flex:1">${F('c_num', 'Número *', 'text', 'required')}</div><div style="flex:2">${F('c_comp', 'Complemento')}</div></div>
+    ${F('c_bairro', 'Bairro *', 'text', 'required')}
+    <div style="display:flex;gap:10px"><div style="flex:3">${F('c_cid', 'Cidade *', 'text', 'autocomplete="address-level2" required')}</div><div style="flex:1">${F('c_uf', 'UF *', 'text', 'maxlength="2" required')}</div></div>
+    <label for="c_civil">Estado civil</label><select id="c_civil"><option value="">—</option>${['Solteiro(a)', 'Casado(a)', 'União estável', 'Divorciado(a)', 'Separado(a)', 'Viúvo(a)'].map(o => `<option>${o}</option>`).join('')}</select>
+    ${F('c_prof', 'Profissão')}
+    <label for="c_origem">Como conheceu o escritório?</label><select id="c_origem"><option value="">—</option>${['Indicação de cliente', 'Indicação de colega', 'Instagram', 'Google', 'Site', 'WhatsApp', 'Outro'].map(o => `<option>${o}</option>`).join('')}</select>
+    ${F('c_s1', 'Crie uma senha * (mínimo 6 caracteres)', 'password', 'autocomplete="new-password" required')}
+    ${F('c_s2', 'Repita a senha *', 'password', 'autocomplete="new-password" required')}
+    <input id="c_site" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <label style="display:flex;gap:10px;align-items:flex-start;margin-top:16px;color:var(--ink)"><input id="c_ok" type="checkbox" style="width:auto;margin-top:5px"> <span>Li e aceito a <a href="/privacidade.html" target="_blank">Política de Privacidade</a> e autorizo o uso destes dados pelo escritório para o meu atendimento e para a prestação dos serviços advocatícios.</span></label>
+    <button class="pri" id="c_env" type="submit">Enviar cadastro</button>
+    <div id="c_msg" class="msg"></div>
+  </form>
+  <p class="priv">🔒 A sua senha não é enviada a ninguém, nem ao escritório: ela fica só com você.</p></div>`;
+  mascCPF($('#c_cpf'));
+  const tel = $('#c_tel'); tel.addEventListener('input', () => { const d = dig(tel.value).slice(0, 11); tel.value = d.length > 6 ? `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}` : d });
+  const cep = $('#c_cep');
+  cep.addEventListener('input', async () => {
+    const d = dig(cep.value).slice(0, 8); cep.value = d.length > 5 ? d.slice(0, 5) + '-' + d.slice(5) : d;
+    if (d.length !== 8) return;
+    try { const j = await (await fetch(`https://viacep.com.br/ws/${d}/json/`)).json(); if (!j.erro) { $('#c_rua').value = j.logradouro || ''; $('#c_bairro').value = j.bairro || ''; $('#c_cid').value = j.localidade || ''; $('#c_uf').value = j.uf || ''; $('#c_num').focus() } } catch (e) { }
+  });
+  $('#fc').onsubmit = async e => {
+    e.preventDefault();
+    const v = id => $('#' + id).value.trim(), m = $('#c_msg'), erro = t => { m.className = 'msg err'; m.textContent = t };
+    for (const [id, l] of [['c_nome', 'o nome completo'], ['c_nasc', 'a data de nascimento'], ['c_email', 'o e-mail'], ['c_rua', 'a rua'], ['c_num', 'o número'], ['c_bairro', 'o bairro'], ['c_cid', 'a cidade'], ['c_uf', 'a UF']]) if (!v(id)) return erro('Preencha ' + l + '.');
+    if (v('c_nome').split(/\s+/).length < 2) return erro('Informe o nome completo.');
+    if (!cpfValido(v('c_cpf'))) return erro('Confira o CPF.');
+    if (dig(v('c_tel')).length < 10) return erro('Confira o WhatsApp com DDD.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('c_email'))) return erro('Confira o e-mail.');
+    if (dig(v('c_cep')).length !== 8) return erro('Confira o CEP.');
+    if ($('#c_s1').value.length < 6) return erro('A senha precisa ter pelo menos 6 caracteres.');
+    if ($('#c_s1').value !== $('#c_s2').value) return erro('As senhas não conferem.');
+    if (!$('#c_ok').checked) return erro('Para enviar, é preciso aceitar a Política de Privacidade.');
+    const b = $('#c_env'); b.disabled = true; b.innerHTML = '<span class="spin"></span> Enviando…'; m.className = 'msg';
+    try {
+      const ch = await chaveDe(v('c_cpf'), $('#c_s1').value);
+      const dados = { nome: v('c_nome'), cpf: dig(v('c_cpf')), nascimento: v('c_nasc'), telefone: v('c_tel'), email: v('c_email').toLowerCase(),
+        cep: v('c_cep'), rua: v('c_rua'), numero: v('c_num'), complemento: v('c_comp'), bairro: v('c_bairro'), cidade: v('c_cid'), uf: v('c_uf').toUpperCase(),
+        estadoCivil: v('c_civil'), profissao: v('c_prof'), origem: v('c_origem'), chave: { id: ch.id, k: ch.k }, aceite: true, site: $('#c_site').value };
+      const r = await fetch(WORKER_URL.replace(/\/$/, '') + '/cadastro', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(dados) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.erro || ('HTTP ' + r.status));
+      rastrear('cadastro-enviado');
+      $('#main').innerHTML = `<div class="card"><h1>Cadastro enviado ✅</h1><p>Obrigado, ${esc(dados.nome.split(' ')[0])}! O escritório vai conferir os seus dados e liberar o seu acesso em até 24 horas. Você será avisado pelo WhatsApp.</p><p class="sub">Depois, entre na <a href="#consulta">Área do cliente</a> com o seu CPF e a senha que você criou.</p></div>`;
+    } catch (err) { b.disabled = false; b.textContent = 'Enviar cadastro'; erro('Não foi possível enviar agora (' + err.message + '). Tente de novo ou fale comigo no WhatsApp.') }
+  };
 }
 
 /* ---------- contato ---------- */
@@ -238,8 +313,9 @@ async function telaNoticias(id) {
 function rota() {
   setTimeout(() => rastrear(), 0);
   const h = (location.hash || '#inicio').slice(1), [r, arg] = h.split('/');
-  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + r));
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + (r === 'cadastro' ? 'consulta' : r)));
   if (r === 'consulta') telaConsulta();
+  else if (r === 'cadastro') telaCadastro();
   else if (r === 'quem-somos') telaQuemSomos();
   else if (r === 'noticias') telaNoticias(arg);
   else telaInicioSite();

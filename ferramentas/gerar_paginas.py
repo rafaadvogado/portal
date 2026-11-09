@@ -82,7 +82,7 @@ def main():
     urls = [(f'{SITE}/', hoje, '1.0'), (f'{SITE}/noticias/', ns[0]['data'] if ns else hoje, '0.8')] + [(f"{SITE}/noticias/{n['id']}.html", n['data'], '0.6') for n in ns] + [(f'{SITE}/privacidade.html', hoje, '0.2')]
     open(os.path.join(RAIZ, 'sitemap.xml'), 'w', encoding='utf-8').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + ''.join(f'  <url><loc>{u}</loc><lastmod>{m}</lastmod><priority>{p}</priority></url>\n' for u, m, p in urls) + '</urlset>\n')
-    open(os.path.join(RAIZ, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /d/\n\nSitemap: {SITE}/sitemap.xml\n')
+    open(os.path.join(RAIZ, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /c/\n\nSitemap: {SITE}/sitemap.xml\n')
     print(f'{len(ns)} notícias; sitemap com {len(urls)} endereços')
 
 
