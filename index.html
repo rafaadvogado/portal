@@ -5,7 +5,7 @@
 <meta name="google-site-verification" content="tgyfcDvuZI-1uQ3k-YotsfJo8O4GH12LNsDFb_J8vOE" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rafael de Mello Souza – Advogado | OAB/SP 352.797</title>
-<meta name="description" content="Rafael de Mello Souza, advogado (OAB/SP 352.797), Bauru-SP. Consulte o andamento do seu processo e fale comigo pelo WhatsApp.">
+<meta name="description" content="Rafael de Mello Souza, advogado (OAB/SP 352.797). Consulte o andamento do seu processo e fale comigo pelo WhatsApp.">
 <meta name="theme-color" content="#0f1e3a">
 <meta name="robots" content="index, follow">
 <link rel="icon" href="icon.png">
@@ -68,7 +68,7 @@ footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px
 <header><img src="icon.png" alt=""><div><div class="n">Rafael de Mello Souza</div><div class="o">Advogado · OAB/SP 352.797</div></div></header>
 <nav id="nav"><a href="#inicio">Início</a><a href="#quem-somos">Quem somos</a><a href="#noticias">Notícias</a><a href="#consulta">Consultar processo</a></nav>
 <main id="main"></main>
-<footer>Rafael de Mello Souza · Advogado · OAB/SP nº 352.797 · Bauru-SP<br><span id="atu"></span></footer>
+<footer>Rafael de Mello Souza · Advogado · OAB/SP nº 352.797<br>© 2026 Rafael de Mello Souza – Advocacia. Todos os direitos reservados.<br>Conteúdo informativo, não constitui consultoria jurídica. Cada caso tem particularidades. · <a href="/privacidade.html">Privacidade</a><br><span id="atu"></span></footer>
 <a id="fab" target="_blank" rel="noopener" aria-label="Falar comigo no WhatsApp">
 <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><circle cx="8" cy="11" r="1.4" fill="#1f9d55"/><circle cx="12" cy="11" r="1.4" fill="#1f9d55"/><circle cx="16" cy="11" r="1.4" fill="#1f9d55"/></svg>
 <span>WhatsApp</span></a>
@@ -210,7 +210,7 @@ const postHtml = n => `<div class="post" id="n-${esc(n.id)}"><div class="d">${fd
 async function telaInicioSite() {
   setFab(MSG_PADRAO);
   const ns = (await noticias()).slice(0, 3);
-  $('#main').innerHTML = `<div class="hero"><h1>Advocacia previdenciária</h1><p>INSS, BPC/LOAS, aposentadorias, auxílios e pensões. Atendimento em Bauru-SP e pelo WhatsApp.</p>
+  $('#main').innerHTML = `<div class="hero"><h1>Advocacia previdenciária</h1><p>INSS, BPC/LOAS, aposentadorias, auxílios e pensões. Atendimento presencial e pelo WhatsApp.</p>
     <div class="acts"><a class="btn wa" href="${waLink(MSG_PADRAO)}" target="_blank" rel="noopener">💬 Falar no WhatsApp</a><a class="btn" href="#consulta">🔎 Consultar meu processo</a></div></div>
   <div class="card"><h2>Áreas de atuação</h2><div class="areas">${AREAS.map(([t, d]) => `<div><b>${t}</b><span class="sub">${d}</span></div>`).join('')}</div><p style="margin-top:12px"><a href="#quem-somos">Conheça a minha trajetória →</a></p></div>
   ${ns.length ? `<div class="card"><h2>Notícias</h2>${ns.map(postHtml).join('')}<p><a href="#noticias">Ver todas as notícias →</a></p></div>` : ''}
@@ -219,7 +219,7 @@ async function telaInicioSite() {
 function telaQuemSomos() {
   setFab(MSG_PADRAO);
   $('#main').innerHTML = `<div class="card"><h1>Quem somos</h1>
-  <p>Sou <b>Rafael de Mello Souza</b>, advogado inscrito na OAB/SP sob o nº 352.797, com escritório em Bauru-SP.</p>
+  <p>Sou <b>Rafael de Mello Souza</b>, advogado inscrito na OAB/SP sob o nº 352.797.</p>
   <p>Atuo com o <b>Direito Previdenciário desde 2008</b> e exerço a <b>advocacia desde 2014</b>. São muitos anos dedicados a quem precisa do INSS: pessoas que buscam a aposentadoria, um auxílio por incapacidade, a pensão de um familiar ou o BPC/LOAS.</p>
   <p>O meu trabalho é explicar cada etapa com clareza, cuidar dos prazos com rigor e manter o cliente informado do começo ao fim, tanto no pedido administrativo no INSS quanto no processo judicial.</p>
   <h2 style="margin-top:18px">Áreas de atuação</h2><div class="areas">${AREAS.map(([t, d]) => `<div><b>${t}</b><span class="sub">${d}</span></div>`).join('')}</div>

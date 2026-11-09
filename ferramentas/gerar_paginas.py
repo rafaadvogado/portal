@@ -40,7 +40,7 @@ def cab(titulo, desc, url, extra=''):
 <nav><a href="/#inicio">Início</a><a href="/#quem-somos">Quem somos</a><a href="/noticias/">Notícias</a><a href="/#consulta">Consultar processo</a></nav><main>"""
 
 
-ROD = f"""</main><footer>Rafael de Mello Souza · Advogado · OAB/SP nº 352.797 · Bauru-SP<br>Conteúdo informativo. Cada caso tem particularidades.</footer></body></html>"""
+ROD = f"""</main><footer>Rafael de Mello Souza · Advogado · OAB/SP nº 352.797<br>© 2026 Rafael de Mello Souza – Advocacia. Todos os direitos reservados.<br>Conteúdo informativo, não constitui consultoria jurídica. Cada caso tem particularidades. · <a href="/privacidade.html">Privacidade</a></footer></body></html>"""
 
 
 def resumo(t, n=155):
@@ -71,10 +71,15 @@ def main():
         open(os.path.join(pasta, n['id'] + '.html'), 'w', encoding='utf-8').write(pag)
     lista = ''.join(f'<div><span class="d">{n["data"][8:10]}/{n["data"][5:7]}/{n["data"][:4]}</span><h2><a href="/noticias/{n["id"]}.html">{e(n["titulo"])}</a></h2><span class="sub">{e(resumo(n["texto"], 180))}</span></div>' for n in ns)
     open(os.path.join(pasta, 'index.html'), 'w', encoding='utf-8').write(
-        cab('Notícias sobre INSS e Direito Previdenciário | Rafael de Mello Souza – Advogado', 'Notícias curtas sobre INSS, aposentadorias, BPC/LOAS e Direito Previdenciário, publicadas toda segunda, quarta e sexta pelo advogado Rafael de Mello Souza (OAB/SP 352.797), de Bauru-SP.', f'{SITE}/noticias/')
+        cab('Notícias sobre INSS e Direito Previdenciário | Rafael de Mello Souza – Advogado', 'Notícias curtas sobre INSS, aposentadorias, BPC/LOAS e Direito Previdenciário, publicadas toda segunda, quarta e sexta pelo advogado Rafael de Mello Souza (OAB/SP 352.797).', f'{SITE}/noticias/')
         + f'<div class="card"><h1>Notícias</h1><p class="sub">INSS e Direito Previdenciário, toda segunda, quarta e sexta.</p><div class="lista">{lista}</div></div>' + ROD)
+    priv = os.path.join(RAIZ, 'ferramentas', 'privacidade.html')
+    if os.path.exists(priv):
+        open(os.path.join(RAIZ, 'privacidade.html'), 'w', encoding='utf-8').write(
+            cab('Política de Privacidade | Rafael de Mello Souza – Advogado', 'Como o site rafaelmsouza.adv.br trata dados pessoais, conforme a LGPD.', f'{SITE}/privacidade.html')
+            + '<article>' + open(priv, encoding='utf-8').read() + '</article>' + ROD)
     hoje = datetime.date.today().isoformat()
-    urls = [(f'{SITE}/', hoje, '1.0'), (f'{SITE}/noticias/', ns[0]['data'] if ns else hoje, '0.8')] + [(f"{SITE}/noticias/{n['id']}.html", n['data'], '0.6') for n in ns]
+    urls = [(f'{SITE}/', hoje, '1.0'), (f'{SITE}/noticias/', ns[0]['data'] if ns else hoje, '0.8')] + [(f"{SITE}/noticias/{n['id']}.html", n['data'], '0.6') for n in ns] + [(f'{SITE}/privacidade.html', hoje, '0.2')]
     open(os.path.join(RAIZ, 'sitemap.xml'), 'w', encoding='utf-8').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + ''.join(f'  <url><loc>{u}</loc><lastmod>{m}</lastmod><priority>{p}</priority></url>\n' for u, m, p in urls) + '</urlset>\n')
     open(os.path.join(RAIZ, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /d/\n\nSitemap: {SITE}/sitemap.xml\n')
