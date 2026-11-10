@@ -286,7 +286,7 @@ let NOTICIAS = null;
 async function noticias() { if (NOTICIAS) return NOTICIAS; try { NOTICIAS = (await (await fetch('noticias.json', { cache: 'no-cache' })).json()).sort((a, b) => b.data.localeCompare(a.data)) } catch (e) { NOTICIAS = [] } return NOTICIAS }
 const postHtml = n => `<div class="post" id="n-${esc(n.id)}"><div class="d">${fd(n.data)}</div><h3>${esc(n.titulo)}</h3>${String(n.texto).split(/\n+/).map(t => `<p>${esc(t)}</p>`).join('')}<div class="sub"><a href="noticias/${encodeURIComponent(n.id)}.html">Abrir a notícia em página própria (para compartilhar) →</a></div>${n.fonte ? `<div class="sub">Fonte: <a href="${esc(n.fonte)}" target="_blank" rel="noopener">${esc(n.fonteNome || 'link')}</a></div>` : ''}</div>`;
 /* Podcast / vídeos do YouTube (o mais recente primeiro). O vídeo só carrega quando a pessoa toca em "play". */
-const VIDEOS = [{ id: 'LKsB1FmF6F0', titulo: 'Podcast – novo episódio' }];
+const VIDEOS = [{ id: 'LKsB1FmF6F0', titulo: 'STF derruba a idade mínima da aposentadoria especial' }];
 function videoHtml(v) {
   return `<div class="video" onclick="tocarVideo(this,'${v.id}')" role="button" aria-label="Assistir: ${esc(v.titulo)}"><img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="${esc(v.titulo)}" loading="lazy"><span class="play">▶</span></div>
   <p style="margin-top:8px"><b>${esc(v.titulo)}</b><br><a href="https://youtu.be/${v.id}" target="_blank" rel="noopener" onclick="rastrear('podcast-youtube')">Assistir no YouTube →</a></p>`;
