@@ -64,6 +64,7 @@ footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px
 .spin{width:18px;height:18px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:g 1s linear infinite}
 @keyframes g{to{transform:rotate(360deg)}}
 @media (max-width:480px){dl{grid-template-columns:1fr}h1{font-size:22px}}
+.video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#0f1e3a;cursor:pointer}.video img,.video iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}.video .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:74px;height:74px;border-radius:50%;background:rgba(15,30,58,.85);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;padding-left:6px}
 </style>
 </head>
 <body>
@@ -284,12 +285,20 @@ const cartaoHtml = () => `<div class="card"><h2>Meu cartão</h2>
 let NOTICIAS = null;
 async function noticias() { if (NOTICIAS) return NOTICIAS; try { NOTICIAS = (await (await fetch('noticias.json', { cache: 'no-cache' })).json()).sort((a, b) => b.data.localeCompare(a.data)) } catch (e) { NOTICIAS = [] } return NOTICIAS }
 const postHtml = n => `<div class="post" id="n-${esc(n.id)}"><div class="d">${fd(n.data)}</div><h3>${esc(n.titulo)}</h3>${String(n.texto).split(/\n+/).map(t => `<p>${esc(t)}</p>`).join('')}<div class="sub"><a href="noticias/${encodeURIComponent(n.id)}.html">Abrir a notícia em página própria (para compartilhar) →</a></div>${n.fonte ? `<div class="sub">Fonte: <a href="${esc(n.fonte)}" target="_blank" rel="noopener">${esc(n.fonteNome || 'link')}</a></div>` : ''}</div>`;
+/* Podcast / vídeos do YouTube (o mais recente primeiro). O vídeo só carrega quando a pessoa toca em "play". */
+const VIDEOS = [{ id: 'LKsB1FmF6F0', titulo: 'Podcast – novo episódio' }];
+function videoHtml(v) {
+  return `<div class="video" onclick="tocarVideo(this,'${v.id}')" role="button" aria-label="Assistir: ${esc(v.titulo)}"><img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="${esc(v.titulo)}" loading="lazy"><span class="play">▶</span></div>
+  <p style="margin-top:8px"><b>${esc(v.titulo)}</b><br><a href="https://youtu.be/${v.id}" target="_blank" rel="noopener" onclick="rastrear('podcast-youtube')">Assistir no YouTube →</a></p>`;
+}
+function tocarVideo(el, id) { rastrear('podcast-play'); el.outerHTML = `<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="Vídeo" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>` }
 async function telaInicioSite() {
   setFab(MSG_PADRAO);
   const ns = (await noticias()).slice(0, 3);
   $('#main').innerHTML = `<div class="hero"><h1>Advocacia previdenciária</h1><p>INSS, BPC/LOAS, aposentadorias, auxílios e pensões. Atendimento presencial e pelo WhatsApp.</p>
     <div class="acts"><a class="btn wa" href="${waLink(MSG_PADRAO)}" target="_blank" rel="noopener">💬 Falar no WhatsApp</a><a class="btn" href="#consulta">🔎 Consultar meu processo</a></div></div>
   <div class="card"><h2>Áreas de atuação</h2><div class="areas">${AREAS.map(([t, d]) => `<div><b>${t}</b><span class="sub">${d}</span></div>`).join('')}</div><p style="margin-top:12px"><a href="#quem-somos">Conheça a minha trajetória →</a></p></div>
+  ${VIDEOS.length ? `<div class="card"><h2>🎙️ Podcast</h2>${videoHtml(VIDEOS[0])}</div>` : ''}
   ${ns.length ? `<div class="card"><h2>Notícias</h2>${ns.map(postHtml).join('')}<p><a href="#noticias">Ver todas as notícias →</a></p></div>` : ''}
   ${cartaoHtml()}`;
 }
