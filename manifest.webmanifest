@@ -1,6 +1,6 @@
 {
-  "name": "Meus Processos com o Rafa",
-  "short_name": "Meus Processos com o Rafa",
+  "name": "Meus Processos",
+  "short_name": "Meus Processos",
   "description": "Área do cliente, notícias do INSS e contato com o escritório.",
   "lang": "pt-BR",
   "start_url": "/#consulta",

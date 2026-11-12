@@ -13,7 +13,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Meus Processos com o Rafa">
+<meta name="apple-mobile-web-app-title" content="Meus Processos">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta property="og:title" content="Rafael de Mello Souza – Advogado">
 <meta property="og:description" content="OAB/SP 352.797 · Consulta de processos para clientes · WhatsApp (14) 99611-9228">
@@ -388,8 +388,8 @@ function painelApp() {
   const inst = instalado();
   let como = '';
   if (!inst) como = ehIOS()
-    ? '<p><b>No iPhone (Safari):</b></p><ol style="margin:.3em 0 .6em 1.2em;padding:0"><li>Toque em <b>Compartilhar</b> (o quadrado com a seta). Se não aparecer, toque antes no botão <b>⋯</b> ou <b>≡</b> da barra de endereço.</li><li>Toque em <b>Adicionar à Tela de Início</b> e depois em <b>Adicionar</b>.</li><li>Abra pelo ícone <b>Meus Processos com o Rafa</b> que aparecerá na tela.</li></ol>'
-    : '<p><b>No Android (Chrome):</b></p><ol style="margin:.3em 0 .6em 1.2em;padding:0"><li>Toque nos <b>três pontinhos ⋮</b>, no canto de cima à direita.</li><li>Toque em <b>Instalar e criar atalho</b> (em alguns celulares aparece <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>) e confirme em <b>Instalar</b>.</li><li>Abra pelo ícone <b>Meus Processos com o Rafa</b> que aparecerá na tela.</li></ol><p style="font-size:.9em">No navegador <b>Samsung Internet</b>: menu <b>≡</b> → <b>Adicionar página a</b> → <b>Tela de início</b>.</p><button class="pri" id="btInstalar" hidden onclick="instalarApp()">📲 Instalar app agora</button>';
+    ? '<p><b>No iPhone (Safari):</b></p><ol style="margin:.3em 0 .6em 1.2em;padding:0"><li>Toque em <b>Compartilhar</b> (o quadrado com a seta). Se não aparecer, toque antes no botão <b>⋯</b> ou <b>≡</b> da barra de endereço.</li><li>Toque em <b>Adicionar à Tela de Início</b> e depois em <b>Adicionar</b>.</li><li>Abra pelo ícone <b>Meus Processos</b> que aparecerá na tela.</li></ol>'
+    : '<p><b>No Android (Chrome):</b></p><ol style="margin:.3em 0 .6em 1.2em;padding:0"><li>Toque nos <b>três pontinhos ⋮</b>, no canto de cima à direita.</li><li>Toque em <b>Instalar e criar atalho</b> (em alguns celulares aparece <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>) e confirme em <b>Instalar</b>.</li><li>Abra pelo ícone <b>Meus Processos</b> que aparecerá na tela.</li></ol><p style="font-size:.9em">No navegador <b>Samsung Internet</b>: menu <b>≡</b> → <b>Adicionar página a</b> → <b>Tela de início</b>.</p><button class="pri" id="btInstalar" hidden onclick="instalarApp()">📲 Instalar app agora</button>';
   return `<details class="appbox" id="cardApp"><summary><i>📱</i><div><b>${inst ? 'Avisos do seu processo no celular' : 'Acompanhe pelo app no celular'}</b><small>${inst ? 'Ative e seja avisado quando houver novidade no andamento.' : 'Instale e receba avisos quando houver novidade no andamento do seu processo.'}</small><em>Toque para ver como ›</em></div></summary><div class="appcorpo">
   ${inst ? '<p>Você está usando o app. Seu acesso fica lembrado neste aparelho — é só abrir pelo ícone.</p>' : '<p>Instale o app no seu celular para abrir os seus processos com um toque, sem digitar CPF e senha toda vez.</p>' + como}
   <div id="avisosBox"></div>
