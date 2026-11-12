@@ -9,7 +9,12 @@
 <meta name="theme-color" content="#0f1e3a">
 <meta name="robots" content="index, follow">
 <link rel="icon" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Dr. Rafael">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta property="og:title" content="Rafael de Mello Souza – Advogado">
 <meta property="og:description" content="OAB/SP 352.797 · Consulta de processos para clientes · WhatsApp (14) 99611-9228">
 <meta property="og:image" content="cartao.jpg">
@@ -65,6 +70,7 @@ footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px
 @keyframes g{to{transform:rotate(360deg)}}
 @media (max-width:480px){dl{grid-template-columns:1fr}h1{font-size:22px}}
 .video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#0f1e3a;cursor:pointer}.video img,.video iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}.video .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:74px;height:74px;border-radius:50%;background:rgba(15,30,58,.85);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;padding-left:6px}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -114,9 +120,13 @@ async function chaveDe(cpf, senha) {   // {id, k}: o que o escritório recebe no
   return { id: hex(id), k: b64(k), kb: k };
 }
 let FID = '';
+let KB = null;
 async function abrir(cpf, senha) {
   const { id, kb } = await chaveDe(cpf, senha);
-  FID = id; let r = null;
+  return abrirPorChave(id, kb);
+}
+async function abrirPorChave(id, kb) {
+  FID = id; KB = kb; let r = null;
   if (WORKER_URL) { try { r = await fetch(WORKER_URL.replace(/\/$/, '') + '/c/' + id, { cache: 'no-store' }) } catch (e) { r = null } }
   if (!r || (r.status !== 200 && r.status !== 404)) r = await fetch('c/' + id + '.json', { cache: 'no-cache' });   // reserva: cópia diária
   if (r.status === 404) return null;
@@ -130,8 +140,30 @@ const mascCPF = el => el.addEventListener('input', () => { const d = dig(el.valu
 
 /* ---------- telas da área do cliente ---------- */
 let CLIENTE = null;
-function telaConsulta(erro) {
+/* ---------- login lembrado no aparelho (guarda só a chave de acesso, nunca a senha) ---------- */
+const LEMBRAR = 'rms_acesso';
+function salvarAcesso() { try { localStorage.setItem(LEMBRAR, JSON.stringify({ id: FID, k: b64(KB) })) } catch (e) { } }
+function acessoSalvo() { try { const a = JSON.parse(localStorage.getItem(LEMBRAR)); return a && a.id && a.k ? a : null } catch (e) { return null } }
+function mostrarCliente(c) {
+  c.processos = (c.processos || []).filter(p => p.ativo); c.processos.forEach(p => { if (/base p[uú]blica|n[aã]o localizad|datajud|consultar no site do tribunal/i.test(p.resumo || '')) p.resumo = '' }); CLIENTE = c;
+  c.processos.length === 1 ? telaProcesso(0) : telaLista();
+}
+async function sair() {
+  try { if (localStorage.getItem('rms_avisos') === '1') await desativarAvisos(true) } catch (e) { }
+  try { localStorage.removeItem(LEMBRAR) } catch (e) { }
+  FID = ''; KB = null; telaConsulta(null, true);
+}
+function telaConsulta(erro, semAuto) {
   setFab(MSG_PADRAO); CLIENTE = null;
+  const salvo = !erro && !semAuto && acessoSalvo();
+  if (salvo) {
+    $('#main').innerHTML = '<div class="card"><h1>Área do cliente</h1><p><span class="spin"></span> Abrindo os seus processos…</p></div>';
+    abrirPorChave(salvo.id, ub(salvo.k)).then(c => {
+      if (!c) { try { localStorage.removeItem(LEMBRAR) } catch (e) { } telaConsulta('O seu acesso precisa ser renovado: entre de novo com CPF e senha.'); return }
+      rastrear('consulta-ok'); mostrarCliente(c);
+    }).catch(err => telaConsulta('Não foi possível abrir agora (' + err.message + '). Tente de novo em instantes.'));
+    return;
+  }
   $('#main').innerHTML = `
   <div class="card">
     <h1>Área do cliente</h1>
@@ -141,6 +173,7 @@ function telaConsulta(erro) {
       <input id="cpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14" required>
       <label for="sen">Senha</label>
       <input id="sen" type="password" placeholder="sua senha" required>
+      <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin-top:10px"><input type="checkbox" id="lembrar" checked style="width:auto;margin:0"> Manter conectado neste aparelho</label>
       <button class="pri" id="ok" type="submit">Entrar</button>
       <div id="msg" class="msg ${erro ? 'err' : ''}">${erro ? esc(erro) : ''}</div>
     </form>
@@ -156,8 +189,8 @@ function telaConsulta(erro) {
     try {
       const c = await abrir(cpf, sen);
       if (!c) { rastrear('consulta-nao-encontrado'); telaConsulta('CPF ou senha não conferem, ou o seu cadastro ainda está em análise. Se precisar, fale comigo no WhatsApp.'); return }
-      rastrear('consulta-ok'); c.processos = (c.processos || []).filter(p => p.ativo); c.processos.forEach(p => { if (/base p[uú]blica|n[aã]o localizad|datajud|consultar no site do tribunal/i.test(p.resumo || '')) p.resumo = '' }); CLIENTE = c;
-      c.processos.length === 1 ? telaProcesso(0) : telaLista();
+      rastrear('consulta-ok'); if ($('#lembrar') && $('#lembrar').checked) salvarAcesso(); else try { localStorage.removeItem(LEMBRAR) } catch (e) { }
+      mostrarCliente(c);
     } catch (err) { telaConsulta('Não foi possível entrar agora (' + err.message + '). Tente de novo em instantes.') }
   };
 }
@@ -166,7 +199,7 @@ function telaLista() {
   setFab(`Olá, Dr. Rafael! Sou ${CLIENTE.cliente.split(' ')[0]}, seu cliente, e tenho uma dúvida:`);
   $('#main').innerHTML = `<div class="card"><div class="sub">Olá, ${primeiroNome()}!</div><h1>Seus processos</h1><div class="sub">${CLIENTE.processos.length ? 'Toque no processo que deseja ver.' : 'Você não tem processos em andamento no momento. Se tiver alguma dúvida, fale comigo no WhatsApp.'}</div>
   ${CLIENTE.processos.map((p, i) => `<a class="proc" href="javascript:telaProcesso(${i})"><span class="tag ${p.ativo ? 'ok' : 'fim'}">${esc(p.situacaoCadastral)}</span><b>${esc(p.acao || 'Processo')}</b><span class="sub">${esc(p.numero)}${p.tribunal ? ' · ' + esc(p.tribunal) : ''}</span>${p.resumo ? `<span class="res">${esc(p.resumo.length > 140 ? p.resumo.slice(0, 140) + '…' : p.resumo)}</span>` : ''}</a>`).join('')}
-  <p class="priv">Informações atualizadas em ${fd(CLIENTE.atualizado)}.</p></div><div class="acts"><button onclick="telaConsulta()">Sair</button></div>`;
+  <p class="priv">Informações atualizadas em ${fd(CLIENTE.atualizado)}.</p></div>${painelApp()}<div class="acts"><button onclick="sair()">Sair</button></div>`; atualizarAvisos();
   window.scrollTo(0, 0);
 }
 function telaProcesso(i) {
@@ -191,8 +224,8 @@ function telaProcesso(i) {
   <div class="acts">
     <a class="btn wa" href="${waLink(`Olá, Dr. Rafael! Sou ${CLIENTE.cliente.split(' ')[0]}, cliente do processo ${p.numero}, e tenho uma dúvida:`)}" target="_blank" rel="noopener">💬 Tirar dúvida no WhatsApp</a>
     ${CLIENTE.processos.length > 1 ? '<button onclick="telaLista()">← Meus processos</button>' : ''}
-    <button onclick="telaConsulta()">Sair</button>
-  </div>`;
+    <button onclick="sair()">Sair</button>
+  </div>${painelApp()}`; atualizarAvisos();
   window.scrollTo(0, 0);
 }
 
@@ -334,6 +367,66 @@ function rota() {
 }
 window.addEventListener('hashchange', rota);
 rota();
+
+/* ---------- app do cliente: instalação e avisos ---------- */
+let PEDIDO_INSTALAR = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); PEDIDO_INSTALAR = e; const b = $('#btInstalar'); if (b) b.hidden = false });
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => { }));
+const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const instalado = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const pushOK = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+function painelApp() {
+  const inst = instalado();
+  let como = '';
+  if (!inst) como = ehIOS()
+    ? '<p>No iPhone: toque em <b>Compartilhar</b> (o quadrado com a seta, na barra do Safari) e depois em <b>Adicionar à Tela de Início</b>. Abra pelo ícone <b>Dr. Rafael</b> que aparecerá na tela.</p>'
+    : '<p>No Android: toque em <b>Instalar app</b> abaixo ou, no Chrome, no menu <b>⋮</b> → <b>Instalar app</b> (ou “Adicionar à tela inicial”).</p><button class="pri" id="btInstalar" hidden onclick="instalarApp()">📲 Instalar app</button>';
+  return `<div class="card" id="cardApp"><h2>📱 Acompanhe pelo celular</h2>
+  ${inst ? '<p>Você está usando o app. Seu acesso fica lembrado neste aparelho — é só abrir pelo ícone.</p>' : '<p>Instale o app no seu celular para abrir os seus processos com um toque, sem digitar CPF e senha toda vez.</p>' + como}
+  <div id="avisosBox"></div>
+  <p class="priv">Os avisos não mostram detalhes do processo, por sigilo: dizem só que houve novidade. Para ver, entre no app.</p></div>`;
+}
+async function instalarApp() { if (!PEDIDO_INSTALAR) return; PEDIDO_INSTALAR.prompt(); try { await PEDIDO_INSTALAR.userChoice } catch (e) { } PEDIDO_INSTALAR = null; const b = $('#btInstalar'); if (b) b.hidden = true }
+async function assinaturaAtual() { try { const r = await navigator.serviceWorker.ready; return await r.pushManager.getSubscription() } catch (e) { return null } }
+async function atualizarAvisos(msg) {
+  const box = $('#avisosBox'); if (!box) return;
+  if (ehIOS() && !instalado()) { box.innerHTML = '<p>🔔 Depois de instalar, abra pelo ícone e ative aqui os <b>avisos de novidades</b> do seu processo.</p>'; return }
+  if (!pushOK()) { box.innerHTML = '<p>🔔 Este navegador não recebe avisos. Use o Chrome (Android) ou o app instalado no iPhone.</p>'; return }
+  if (Notification.permission === 'denied') { box.innerHTML = '<p>🔕 Os avisos estão bloqueados nas configurações do aparelho para este site. Libere as notificações e volte aqui.</p>'; return }
+  const sub = await assinaturaAtual(); const ativo = sub && localStorage.getItem('rms_avisos') === '1';
+  const not = localStorage.getItem('rms_noticias') !== '0';
+  box.innerHTML = ativo
+    ? `<p>🔔 <b>Avisos ativados</b> neste aparelho. Você será avisado quando houver novidade no seu processo.</p>
+       <label style="display:flex;gap:8px;align-items:center;font-weight:400"><input type="checkbox" id="chkNot" ${not ? 'checked' : ''} style="width:auto;margin:0" onchange="ativarAvisos()"> Receber também o resumo semanal de notícias do INSS</label>
+       <div class="acts"><button onclick="desativarAvisos()">Desativar avisos</button></div>`
+    : `<p>🔔 Quer ser avisado quando houver novidade no seu processo?</p>
+       <label style="display:flex;gap:8px;align-items:center;font-weight:400"><input type="checkbox" id="chkNot" ${not ? 'checked' : ''} style="width:auto;margin:0"> Receber também o resumo semanal de notícias do INSS</label>
+       <button class="pri" onclick="ativarAvisos()">Ativar avisos</button>`;
+  if (msg) box.insertAdjacentHTML('beforeend', '<p class="priv">' + msg + '</p>');
+}
+async function ativarAvisos() {
+  const box = $('#avisosBox');
+  try {
+    if (!FID) throw new Error('entre novamente');
+    if (await Notification.requestPermission() !== 'granted') return atualizarAvisos();
+    const base = WORKER_URL.replace(/\/$/, '');
+    const rk = await fetch(base + '/push/chave'); if (!rk.ok) throw new Error('serviço de avisos indisponível no momento');
+    const { chave } = await rk.json();
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: ub(chave.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(chave.length / 4) * 4, '=')) });
+    const noticias = $('#chkNot') ? $('#chkNot').checked : true;
+    const r = await fetch(base + '/push/assinar', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ fid: FID, sub: sub.toJSON(), noticias }) });
+    if (!r.ok) throw new Error('não foi possível registrar (' + r.status + ')');
+    localStorage.setItem('rms_avisos', '1'); localStorage.setItem('rms_noticias', noticias ? '1' : '0');
+    rastrear('avisos-ativados'); atualizarAvisos('Pronto! Os avisos chegarão neste aparelho.');
+  } catch (e) { if (box) atualizarAvisos('Não foi possível ativar: ' + e.message + '.') }
+}
+async function desativarAvisos(silencioso) {
+  const sub = await assinaturaAtual();
+  if (sub) { try { await fetch(WORKER_URL.replace(/\/$/, '') + '/push/sair', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ endpoint: sub.endpoint }) }) } catch (e) { } try { await sub.unsubscribe() } catch (e) { } }
+  localStorage.removeItem('rms_avisos'); if (!silencioso) atualizarAvisos('Avisos desativados.');
+}
 </script>
 </body>
 </html>
