@@ -1,6 +1,6 @@
 {
-  "name": "Rafael de Mello Souza – Advogado",
-  "short_name": "Dr. Rafael",
+  "name": "Meus Processos com o Rafa",
+  "short_name": "Meus Processos com o Rafa",
   "description": "Área do cliente, notícias do INSS e contato com o escritório.",
   "lang": "pt-BR",
   "start_url": "/#consulta",
@@ -9,8 +9,23 @@
   "background_color": "#0f1e3a",
   "theme_color": "#0f1e3a",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
