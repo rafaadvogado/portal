@@ -71,11 +71,14 @@ footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px
 @media (max-width:480px){dl{grid-template-columns:1fr}h1{font-size:22px}}
 .video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#0f1e3a;cursor:pointer}.video img,.video iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}.video .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:74px;height:74px;border-radius:50%;background:rgba(15,30,58,.85);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;padding-left:6px}
 [hidden]{display:none!important}
-.appbox{margin:14px 0 18px;border:1px solid #c9a86a;border-radius:14px;background:#fbf6ec}
-.appbox summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:700;color:#0f1e3a;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.appbox{margin:0 0 18px;border:1px solid #c9a86a;border-radius:14px;background:#fbf6ec}
+.appbox summary{list-style:none;cursor:pointer;padding:14px 16px;color:#0f1e3a;display:flex;align-items:flex-start;gap:12px}
+.appbox summary i{font-style:normal;font-size:1.8em;line-height:1}
+.appbox summary b{display:block;font-size:1.05em}
+.appbox summary small{display:block;font-size:.9em;color:#3d4a63;margin-top:2px;line-height:1.35}
+.appbox summary em{display:block;font-style:normal;font-weight:600;font-size:.85em;color:#8a6a2f;margin-top:6px}
+.appbox[open] summary em{display:none}
 .appbox summary::-webkit-details-marker{display:none}
-.appbox summary span{font-weight:500;font-size:.85em;color:#8a6a2f;white-space:nowrap}
-.appbox[open] summary span{display:none}
 .appcorpo{padding:0 16px 14px}.appcorpo p{margin:.5em 0}
 </style>
 </head>
@@ -203,7 +206,7 @@ function telaConsulta(erro, semAuto) {
 const primeiroNome = () => esc((CLIENTE?.cliente || '').split(' ')[0]);
 function telaLista() {
   setFab(`Olá, Dr. Rafael! Sou ${CLIENTE.cliente.split(' ')[0]}, seu cliente, e tenho uma dúvida:`);
-  $('#main').innerHTML = `<div class="card"><div class="sub">Olá, ${primeiroNome()}!</div><h1>Seus processos</h1>${painelApp()}<div class="sub">${CLIENTE.processos.length ? 'Toque no processo que deseja ver.' : 'Você não tem processos em andamento no momento. Se tiver alguma dúvida, fale comigo no WhatsApp.'}</div>
+  $('#main').innerHTML = `<div class="card">${painelApp()}<div class="sub">Olá, ${primeiroNome()}!</div><h1>Seus processos</h1><div class="sub">${CLIENTE.processos.length ? 'Toque no processo que deseja ver.' : 'Você não tem processos em andamento no momento. Se tiver alguma dúvida, fale comigo no WhatsApp.'}</div>
   ${CLIENTE.processos.map((p, i) => `<a class="proc" href="javascript:telaProcesso(${i})"><span class="tag ${p.ativo ? 'ok' : 'fim'}">${esc(p.situacaoCadastral)}</span><b>${esc(p.acao || 'Processo')}</b><span class="sub">${esc(p.numero)}${p.tribunal ? ' · ' + esc(p.tribunal) : ''}</span>${p.resumo ? `<span class="res">${esc(p.resumo.length > 140 ? p.resumo.slice(0, 140) + '…' : p.resumo)}</span>` : ''}</a>`).join('')}
   <p class="priv">Informações atualizadas em ${fd(CLIENTE.atualizado)}.</p></div><div class="acts"><button onclick="sair()">Sair</button></div>`; atualizarAvisos();
   window.scrollTo(0, 0);
@@ -216,8 +219,8 @@ function telaProcesso(i) {
   const I = (l, v, w) => v ? `<div class="${w ? 'w2' : ''}"><dt>${l}</dt><dd>${esc(v)}</dd></div>` : '';
   $('#main').innerHTML = `
   <div class="card">
-    <div class="sub">Olá, ${primeiroNome()}!</div>
-    <h1>Seu processo</h1>${CLIENTE.processos.length === 1 ? painelApp() : ''}
+    ${CLIENTE.processos.length === 1 ? painelApp() : ''}<div class="sub">Olá, ${primeiroNome()}!</div>
+    <h1>Seu processo</h1>
     <div style="margin-top:4px">${st}</div>
     <dl>${I('Número', p.numero, 1)}${I('Ação', p.acao, 1)}${I('Área', p.area)}${I('Tribunal', p.tribunal)}${I('Vara / órgão', p.vara)}${I('Comarca', p.comarca)}${I('Parte contrária', p.parteContraria, 1)}</dl>
     ${p.resumo ? `<div class="resumo"><b>Em que fase está</b><br>${esc(p.resumo)}</div>` : ''}
@@ -387,7 +390,7 @@ function painelApp() {
   if (!inst) como = ehIOS()
     ? '<p><b>No iPhone (Safari):</b></p><ol style="margin:.3em 0 .6em 1.2em;padding:0"><li>Toque em <b>Compartilhar</b> (o quadrado com a seta). Se não aparecer, toque antes no botão <b>⋯</b> ou <b>≡</b> da barra de endereço.</li><li>Toque em <b>Adicionar à Tela de Início</b> e depois em <b>Adicionar</b>.</li><li>Abra pelo ícone <b>Dr. Rafael</b> que aparecerá na tela.</li></ol>'
     : '<p>No Android: toque em <b>Instalar app</b> abaixo ou, no Chrome, no menu <b>⋮</b> → <b>Instalar app</b> (ou “Adicionar à tela inicial”).</p><button class="pri" id="btInstalar" hidden onclick="instalarApp()">📲 Instalar app</button>';
-  return `<details class="appbox" id="cardApp"><summary>📱 Acompanhe pelo celular <span>${inst ? 'avisos' : 'instalar o app'} ›</span></summary><div class="appcorpo">
+  return `<details class="appbox" id="cardApp"><summary><i>📱</i><div><b>${inst ? 'Avisos do seu processo no celular' : 'Acompanhe pelo app no celular'}</b><small>${inst ? 'Ative e seja avisado quando houver novidade no andamento.' : 'Instale e receba avisos quando houver novidade no andamento do seu processo.'}</small><em>Toque para ver como ›</em></div></summary><div class="appcorpo">
   ${inst ? '<p>Você está usando o app. Seu acesso fica lembrado neste aparelho — é só abrir pelo ícone.</p>' : '<p>Instale o app no seu celular para abrir os seus processos com um toque, sem digitar CPF e senha toda vez.</p>' + como}
   <div id="avisosBox"></div>
   <p class="priv">Os avisos não mostram detalhes do processo, por sigilo: dizem só que houve novidade. Para ver, entre no app.</p></div></details>`;

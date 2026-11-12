@@ -6,7 +6,7 @@ self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
 self.addEventListener('fetch', e => {
   const r = e.request;
   if (r.method !== 'GET' || new URL(r.url).origin !== location.origin) return;
-  e.respondWith(fetch(r).then(resp => {
+  e.respondWith(fetch(r, r.mode === 'navigate' ? { cache: 'no-cache' } : undefined).then(resp => {
     if (resp.ok && r.mode === 'navigate') { const c = resp.clone(); caches.open(CACHE).then(k => k.put('./', c)) }
     return resp;
   }).catch(() => caches.match(r).then(x => x || caches.match('./'))));
