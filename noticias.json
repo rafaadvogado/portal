@@ -1,58 +1,66 @@
 [
-  {
-    "id": "2026-11-12-stf-vai-julgar-calculo-aposentadoria-pcd-tema-1497",
-    "data": "2026-11-12",
-    "titulo": "STF vai julgar o cálculo da aposentadoria da pessoa com deficiência",
-    "texto": "O STF reconheceu, por unanimidade, a repercussão geral do Tema 1497, que discute como deve ser calculada a aposentadoria da pessoa com deficiência depois da Reforma da Previdência. A dúvida é se vale a média dos 80% maiores salários, prevista na Lei Complementar 142/2013, ou a média de todos os salários, aplicada pelo INSS.\nAinda não há decisão sobre o mérito, e o valor dos benefícios não muda por enquanto. Quando o STF julgar, a tese valerá para todos os processos sobre o tema.",
-    "fonte": "https://previdenciarista.com/blog/stf-vai-julgar-mudanca-de-valor-da-aposentadoria-pcd/",
-    "fonteNome": "Previdenciarista – STF vai julgar mudança de valor da aposentadoria PcD"
-  },
-  {
-    "id": "2026-11-11-inss-auxilio-doenca-negado-atestmed-reanalise-10-dias",
-    "data": "2026-11-11",
-    "titulo": "Auxílio-doença negado pelo Atestmed: INSS abre reanálise em 10 dias",
-    "texto": "Quem teve o auxílio por incapacidade temporária (antigo auxílio-doença) negado só pela análise de documentos do Atestmed pode pedir uma reanálise em até 10 dias, contados da ciência da decisão. A regra está na Portaria Conjunta MPS/INSS nº 54 e vale para negativas comunicadas desde 6 de novembro de 2026.\nA reanálise é feita pela Perícia Médica Federal, por outro perito. Atenção: quem apresentar recurso dentro desses 10 dias, sem pedir antes a reanálise, perde essa opção. Confira a decisão no Meu INSS.",
-    "fonte": "https://agenciabrasil.ebc.com.br/saude/noticia/2026-11/governo-altera-regras-da-pericia-para-concessao-do-auxilio-doenca",
-    "fonteNome": "Agência Brasil – Governo altera regras da perícia para concessão do auxílio-doença"
-  },
-  {
-    "id": "2026-11-10-stf-tema-1497-calculo-aposentadoria-pessoa-com-deficiencia",
-    "data": "2026-11-10",
-    "titulo": "STF decide hoje se julgará o cálculo da aposentadoria da pessoa com deficiência",
-    "texto": "Termina hoje (10/11) a votação no Plenário Virtual do STF sobre a repercussão geral do Tema 1497 (RE 1.597.638), que discute os critérios de cálculo da aposentadoria da pessoa com deficiência após a Reforma da Previdência. Nesta etapa, os ministros decidem se o assunto tem repercussão geral; o mérito será julgado depois.\nA discussão envolve a forma como o INSS calcula a média dos salários desse benefício, previsto na Lei Complementar 142/2013. A decisão final valerá para todos os processos sobre o tema.",
-    "fonte": "https://portal.stf.jus.br/repercussaogeral/",
-    "fonteNome": "STF – Repercussão Geral, Tema 1497"
-  },
-  {
-    "id": "2026-11-10-podcast-aposentadoria-especial-sem-idade-minima",
-    "data": "2026-11-10",
-    "titulo": "Podcast: aposentadoria especial sem idade mínima após decisão do STF",
-    "texto": "Novo episódio do podcast explica a decisão do STF na ADI 6309, que derrubou a idade mínima de 55, 58 e 60 anos criada pela Reforma da Previdência para a aposentadoria especial. O benefício volta a depender do tempo de exposição comprovado: 15, 20 ou 25 anos.\nO episódio também mostra o que não mudou, como o cálculo da Reforma e a proibição de converter tempo especial depois de 13/11/2019, e quais profissões podem ser atingidas.",
-    "fonte": "https://youtu.be/LKsB1FmF6F0",
-    "fonteNome": "YouTube – Aposentadoria Especial: Sem idade mínima (podcast)"
-  },
-  {
-    "id": "2026-11-10-inss-piso-aposentadoria-2027-1741",
-    "data": "2026-11-10",
-    "titulo": "INSS: piso das aposentadorias deve ir a R$ 1.741 em 2027",
-    "texto": "O Orçamento de 2027 enviado pelo governo prevê salário mínimo de R$ 1.741, R$ 120 a mais que os R$ 1.621 atuais (alta de cerca de 7,4%). Aposentadorias, pensões e o BPC de um salário mínimo acompanham o novo piso a partir do pagamento de janeiro de 2027.\nQuem recebe acima do mínimo tem o reajuste pelo INPC do ano, ainda não divulgado. O valor de R$ 1.741 é uma previsão: o número final sai por decreto em dezembro, depois do INPC de novembro.",
-    "fonte": "https://www.jb.com.br/editorias/2026/10/05/salario-minimo-2027.html",
-    "fonteNome": "Jornal do Brasil – Orçamento prevê salário mínimo de R$ 1.741 em 2027"
-  },
-  {
-    "id": "2026-11-09-inss-biometria-bloqueio-falso",
-    "data": "2026-11-09",
-    "titulo": "INSS: é falso que benefício será bloqueado sem biometria em novembro",
-    "texto": "Circulam mensagens dizendo que aposentadorias e pensões serão bloqueadas em 20 de novembro por falta de biometria. O INSS informa que não existe prazo geral desse tipo: a biometria é exigida nos novos pedidos feitos desde 21 de novembro de 2025, com exceções.\nO cadastro não é feito em agência: os dados vêm de documentos como a nova identidade (CIN), a CNH ou o título de eleitor. O INSS não pede senhas, dados bancários nem transferências. Na dúvida, consulte o Meu INSS ou ligue 135.",
-    "fonte": "https://agenciabrasil.ebc.com.br/geral/noticia/2026-10/inss-alerta-para-golpes-que-usam-informacao-falsa-sobre-biometria",
-    "fonteNome": "Agência Brasil – INSS alerta para golpes sobre biometria"
-  },
-  {
-    "id": "2026-11-08-calendario-novembro",
-    "data": "2026-11-08",
-    "titulo": "INSS: pagamentos de novembro começam no dia 24",
-    "texto": "Os benefícios referentes a novembro começam a ser pagos em 24/11 para quem recebe até um salário mínimo e em 1º/12 para quem recebe acima disso. Os depósitos vão até 7 de dezembro, conforme o final do número do benefício.\nQuem começou a receber benefício a partir de maio e não entrou na antecipação do 13º terá o abono pago junto com a folha de novembro, de forma proporcional. BPC/LOAS não dá direito ao 13º. Confira a sua data no aplicativo Meu INSS.",
-    "fonte": "https://www.c6bank.com.br/blog/calendario-inss-novembro-2026",
-    "fonteNome": "C6 Bank – Calendário INSS novembro 2026"
-  }
+ {
+  "id": "2026-11-13-13-salario-proporcional-novos-beneficios-inss",
+  "data": "2026-11-13",
+  "titulo": "Começou a receber do INSS depois de abril? O 13º vem na folha de novembro",
+  "texto": "Quem passou a receber aposentadoria, pensão por morte, auxílio-acidente ou auxílio por incapacidade temporária a partir de maio de 2026 não entrou na antecipação do 13º feita em abril e maio. Para esse grupo, o abono será pago de uma só vez na folha de novembro, entre 24 de novembro e 7 de dezembro, conforme o final do número do benefício.\nO valor é proporcional: o benefício mensal é dividido por 12 e multiplicado pelos meses recebidos no ano, e um período de 15 dias ou mais conta como mês inteiro. O BPC/Loas e a Renda Mensal Vitalícia não dão direito ao 13º, porque são benefícios assistenciais. O valor pode ser conferido no extrato do Meu INSS, e o INSS não cobra nada para liberar o pagamento.",
+  "fonte": "https://www.correio24horas.com.br/brasil/inss-vai-pagar-13-salario-em-novembro-e-dezembro-veja-quem-tem-direito-e-as-datas-1126",
+  "fonteNome": "Correio – INSS vai pagar 13º salário em novembro e dezembro"
+ },
+ {
+  "id": "2026-11-12-stf-vai-julgar-calculo-aposentadoria-pcd-tema-1497",
+  "data": "2026-11-12",
+  "titulo": "STF vai julgar o cálculo da aposentadoria da pessoa com deficiência",
+  "texto": "O STF reconheceu, por unanimidade, a repercussão geral do Tema 1497, que discute como deve ser calculada a aposentadoria da pessoa com deficiência depois da Reforma da Previdência. A dúvida é se vale a média dos 80% maiores salários, prevista na Lei Complementar 142/2013, ou a média de todos os salários, aplicada pelo INSS.\nAinda não há decisão sobre o mérito, e o valor dos benefícios não muda por enquanto. Quando o STF julgar, a tese valerá para todos os processos sobre o tema.",
+  "fonte": "https://previdenciarista.com/blog/stf-vai-julgar-mudanca-de-valor-da-aposentadoria-pcd/",
+  "fonteNome": "Previdenciarista – STF vai julgar mudança de valor da aposentadoria PcD"
+ },
+ {
+  "id": "2026-11-11-inss-auxilio-doenca-negado-atestmed-reanalise-10-dias",
+  "data": "2026-11-11",
+  "titulo": "Auxílio-doença negado pelo Atestmed: INSS abre reanálise em 10 dias",
+  "texto": "Quem teve o auxílio por incapacidade temporária (antigo auxílio-doença) negado só pela análise de documentos do Atestmed pode pedir uma reanálise em até 10 dias, contados da ciência da decisão. A regra está na Portaria Conjunta MPS/INSS nº 54 e vale para negativas comunicadas desde 6 de novembro de 2026.\nA reanálise é feita pela Perícia Médica Federal, por outro perito. Atenção: quem apresentar recurso dentro desses 10 dias, sem pedir antes a reanálise, perde essa opção. Confira a decisão no Meu INSS.",
+  "fonte": "https://agenciabrasil.ebc.com.br/saude/noticia/2026-11/governo-altera-regras-da-pericia-para-concessao-do-auxilio-doenca",
+  "fonteNome": "Agência Brasil – Governo altera regras da perícia para concessão do auxílio-doença"
+ },
+ {
+  "id": "2026-11-10-stf-tema-1497-calculo-aposentadoria-pessoa-com-deficiencia",
+  "data": "2026-11-10",
+  "titulo": "STF decide hoje se julgará o cálculo da aposentadoria da pessoa com deficiência",
+  "texto": "Termina hoje (10/11) a votação no Plenário Virtual do STF sobre a repercussão geral do Tema 1497 (RE 1.597.638), que discute os critérios de cálculo da aposentadoria da pessoa com deficiência após a Reforma da Previdência. Nesta etapa, os ministros decidem se o assunto tem repercussão geral; o mérito será julgado depois.\nA discussão envolve a forma como o INSS calcula a média dos salários desse benefício, previsto na Lei Complementar 142/2013. A decisão final valerá para todos os processos sobre o tema.",
+  "fonte": "https://portal.stf.jus.br/repercussaogeral/",
+  "fonteNome": "STF – Repercussão Geral, Tema 1497"
+ },
+ {
+  "id": "2026-11-10-podcast-aposentadoria-especial-sem-idade-minima",
+  "data": "2026-11-10",
+  "titulo": "Podcast: aposentadoria especial sem idade mínima após decisão do STF",
+  "texto": "Novo episódio do podcast explica a decisão do STF na ADI 6309, que derrubou a idade mínima de 55, 58 e 60 anos criada pela Reforma da Previdência para a aposentadoria especial. O benefício volta a depender do tempo de exposição comprovado: 15, 20 ou 25 anos.\nO episódio também mostra o que não mudou, como o cálculo da Reforma e a proibição de converter tempo especial depois de 13/11/2019, e quais profissões podem ser atingidas.",
+  "fonte": "https://youtu.be/LKsB1FmF6F0",
+  "fonteNome": "YouTube – Aposentadoria Especial: Sem idade mínima (podcast)"
+ },
+ {
+  "id": "2026-11-10-inss-piso-aposentadoria-2027-1741",
+  "data": "2026-11-10",
+  "titulo": "INSS: piso das aposentadorias deve ir a R$ 1.741 em 2027",
+  "texto": "O Orçamento de 2027 enviado pelo governo prevê salário mínimo de R$ 1.741, R$ 120 a mais que os R$ 1.621 atuais (alta de cerca de 7,4%). Aposentadorias, pensões e o BPC de um salário mínimo acompanham o novo piso a partir do pagamento de janeiro de 2027.\nQuem recebe acima do mínimo tem o reajuste pelo INPC do ano, ainda não divulgado. O valor de R$ 1.741 é uma previsão: o número final sai por decreto em dezembro, depois do INPC de novembro.",
+  "fonte": "https://www.jb.com.br/editorias/2026/10/05/salario-minimo-2027.html",
+  "fonteNome": "Jornal do Brasil – Orçamento prevê salário mínimo de R$ 1.741 em 2027"
+ },
+ {
+  "id": "2026-11-09-inss-biometria-bloqueio-falso",
+  "data": "2026-11-09",
+  "titulo": "INSS: é falso que benefício será bloqueado sem biometria em novembro",
+  "texto": "Circulam mensagens dizendo que aposentadorias e pensões serão bloqueadas em 20 de novembro por falta de biometria. O INSS informa que não existe prazo geral desse tipo: a biometria é exigida nos novos pedidos feitos desde 21 de novembro de 2025, com exceções.\nO cadastro não é feito em agência: os dados vêm de documentos como a nova identidade (CIN), a CNH ou o título de eleitor. O INSS não pede senhas, dados bancários nem transferências. Na dúvida, consulte o Meu INSS ou ligue 135.",
+  "fonte": "https://agenciabrasil.ebc.com.br/geral/noticia/2026-10/inss-alerta-para-golpes-que-usam-informacao-falsa-sobre-biometria",
+  "fonteNome": "Agência Brasil – INSS alerta para golpes sobre biometria"
+ },
+ {
+  "id": "2026-11-08-calendario-novembro",
+  "data": "2026-11-08",
+  "titulo": "INSS: pagamentos de novembro começam no dia 24",
+  "texto": "Os benefícios referentes a novembro começam a ser pagos em 24/11 para quem recebe até um salário mínimo e em 1º/12 para quem recebe acima disso. Os depósitos vão até 7 de dezembro, conforme o final do número do benefício.\nQuem começou a receber benefício a partir de maio e não entrou na antecipação do 13º terá o abono pago junto com a folha de novembro, de forma proporcional. BPC/LOAS não dá direito ao 13º. Confira a sua data no aplicativo Meu INSS.",
+  "fonte": "https://www.c6bank.com.br/blog/calendario-inss-novembro-2026",
+  "fonteNome": "C6 Bank – Calendário INSS novembro 2026"
+ }
 ]

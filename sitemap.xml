@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://rafaelmsouza.adv.br/</loc><lastmod>2026-11-12</lastmod><priority>1.0</priority></url>
-  <url><loc>https://rafaelmsouza.adv.br/noticias/</loc><lastmod>2026-11-12</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rafaelmsouza.adv.br/</loc><lastmod>2026-11-13</lastmod><priority>1.0</priority></url>
+  <url><loc>https://rafaelmsouza.adv.br/noticias/</loc><lastmod>2026-11-13</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-13-13-salario-proporcional-novos-beneficios-inss.html</loc><lastmod>2026-11-13</lastmod><priority>0.6</priority></url>
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-12-stf-vai-julgar-calculo-aposentadoria-pcd-tema-1497.html</loc><lastmod>2026-11-12</lastmod><priority>0.6</priority></url>
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-11-inss-auxilio-doenca-negado-atestmed-reanalise-10-dias.html</loc><lastmod>2026-11-11</lastmod><priority>0.6</priority></url>
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-10-stf-tema-1497-calculo-aposentadoria-pessoa-com-deficiencia.html</loc><lastmod>2026-11-10</lastmod><priority>0.6</priority></url>
@@ -9,5 +10,5 @@
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-10-inss-piso-aposentadoria-2027-1741.html</loc><lastmod>2026-11-10</lastmod><priority>0.6</priority></url>
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-09-inss-biometria-bloqueio-falso.html</loc><lastmod>2026-11-09</lastmod><priority>0.6</priority></url>
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-08-calendario-novembro.html</loc><lastmod>2026-11-08</lastmod><priority>0.6</priority></url>
-  <url><loc>https://rafaelmsouza.adv.br/privacidade.html</loc><lastmod>2026-11-12</lastmod><priority>0.2</priority></url>
+  <url><loc>https://rafaelmsouza.adv.br/privacidade.html</loc><lastmod>2026-11-13</lastmod><priority>0.2</priority></url>
 </urlset>
