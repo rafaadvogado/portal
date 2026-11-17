@@ -339,7 +339,7 @@ function tocarVideo(el, id) { rastrear('podcast-play'); el.outerHTML = `<div cla
 async function telaInicioSite() {
   setFab(MSG_PADRAO);
   const ns = (await noticias()).slice(0, 3);
-  $('#main').innerHTML = `<div class="hero"><h1>Advocacia previdenciária</h1><p>INSS, BPC/LOAS, aposentadorias, auxílios e pensões. Atendimento presencial e pelo WhatsApp.</p>
+  $('#main').innerHTML = `<div class="hero"><h1>Advocacia previdenciária e de direito público</h1><p>INSS, BPC/LOAS, servidores públicos e direito à saúde. Atendimento presencial e pelo WhatsApp.</p>
     <div class="acts"><a class="btn wa" href="${waLink(MSG_PADRAO)}" target="_blank" rel="noopener">💬 Falar no WhatsApp</a><a class="btn" href="#consulta">🔎 Consultar meu processo</a></div></div>
   <div class="card"><h2>Áreas de atuação</h2><div class="areas">${AREAS.map(([t, d]) => `<div><b>${t}</b><span class="sub">${d}</span></div>`).join('')}</div><p style="margin-top:12px"><a href="#quem-somos">Conheça a minha trajetória →</a></p></div>
   ${VIDEOS.length ? `<div class="card"><h2>🎙️ Podcast</h2>${videoHtml(VIDEOS[0])}</div>` : ''}
