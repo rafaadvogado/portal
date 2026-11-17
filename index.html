@@ -81,6 +81,21 @@ footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px
 .appbox summary::-webkit-details-marker{display:none}
 .appcorpo{padding:0 16px 14px}.appcorpo p{margin:.5em 0}
 .lista{margin:8px 0 6px 20px;padding:0}.lista li{margin:6px 0;line-height:1.5}
+.redes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.rede{display:flex;flex-direction:column;border-radius:14px;overflow:hidden;background:var(--paper);text-decoration:none;color:inherit;border:1px solid rgba(15,30,58,.08);transition:transform .15s,box-shadow .15s}
+.rede:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(15,30,58,.12)}
+.rede .pv{position:relative;aspect-ratio:9/12;background:#0f1e3a center/cover no-repeat}
+.rede.yt .pv{aspect-ratio:9/12;background-size:cover}
+.rede .pv .tag{position:absolute;left:10px;top:10px;color:#fff;font-weight:700;font-size:13px;padding:5px 10px;border-radius:99px;display:flex;gap:6px;align-items:center}
+.rede.ig .tag{background:linear-gradient(45deg,#f58529,#dd2a7b 50%,#8134af)}
+.rede.tt .tag{background:#111}
+.rede.yt .tag{background:#e62117}
+.rede .pv .play{position:absolute;inset:0;margin:auto;width:54px;height:54px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px}
+.rede .tx{padding:10px 12px 12px}
+.rede .tx b{display:block;color:var(--navy)}
+.rede .tx span{font-size:13px;color:#5b6475}
+.rede .tx em{display:inline-block;margin-top:8px;font-style:normal;font-weight:700;font-size:14px;color:var(--navy)}
+@media(max-width:620px){.redes{grid-template-columns:1fr}.rede{flex-direction:row}.rede .pv{width:38%;aspect-ratio:auto;min-height:150px;flex:none}.rede .tx{display:flex;flex-direction:column;justify-content:center}}
 </style>
 </head>
 <body>
@@ -331,6 +346,12 @@ async function noticias() { if (NOTICIAS) return NOTICIAS; try { NOTICIAS = (awa
 const postHtml = n => `<div class="post" id="n-${esc(n.id)}"><div class="d">${fd(n.data)}</div><h3>${esc(n.titulo)}</h3>${String(n.texto).split(/\n+/).map(t => `<p>${esc(t)}</p>`).join('')}<div class="sub"><a href="noticias/${encodeURIComponent(n.id)}.html">Abrir a notícia em página própria (para compartilhar) →</a></div>${n.fonte ? `<div class="sub">Fonte: <a href="${esc(n.fonte)}" target="_blank" rel="noopener">${esc(n.fonteNome || 'link')}</a></div>` : ''}</div>`;
 /* Podcast / vídeos do YouTube (o mais recente primeiro). O vídeo só carrega quando a pessoa toca em "play". */
 const VIDEOS = [{ id: 'LKsB1FmF6F0', titulo: 'Aposentadoria Especial – Sem idade mínima', resumo: 'O STF derrubou a idade mínima de 55, 58 e 60 anos da aposentadoria especial. No episódio: o que mudou, o que continua igual e quais profissões podem ser atingidas.' }];
+const REDES = [
+  { c: 'ig', nome: 'Instagram', user: '@rafaadvogado', url: 'https://www.instagram.com/rafaadvogado/', desc: 'Notícias do INSS todos os dias úteis, em vídeo e nos stories.', img: 'redes/ultimo.jpg', acao: 'Seguir no Instagram' },
+  { c: 'tt', nome: 'TikTok', user: '@rafael.advogado5', url: 'https://www.tiktok.com/@rafael.advogado5', desc: 'Vídeos curtos explicando seus direitos no INSS.', img: 'redes/story.jpg', acao: 'Seguir no TikTok' },
+  { c: 'yt', nome: 'YouTube', user: '@rafaadvogado', url: 'https://www.youtube.com/@rafaadvogado', desc: 'Podcast e vídeos sobre aposentadoria e benefícios.', img: () => VIDEOS.length ? `https://i.ytimg.com/vi/${VIDEOS[0].id}/hqdefault.jpg` : 'redes/ultimo.jpg', acao: 'Ver no YouTube' }
+];
+const redesHtml = () => `<div class="card" id="redes"><h2>Redes sociais</h2><p class="sub">Acompanhe as notícias e os vídeos sobre os seus direitos.</p><div class="redes">${REDES.map(r => `<a class="rede ${r.c}" href="${r.url}" target="_blank" rel="noopener" onclick="rastrear('rede-${r.c}')"><div class="pv" style="background-image:url('${typeof r.img === 'function' ? r.img() : r.img}')"><span class="tag">${r.nome}</span><span class="play">▶</span></div><div class="tx"><b>${r.user}</b><span>${r.desc}</span><em>${r.acao} →</em></div></a>`).join('')}</div></div>`;
 function videoHtml(v) {
   return `<div class="video" onclick="tocarVideo(this,'${v.id}')" role="button" aria-label="Assistir: ${esc(v.titulo)}"><img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="${esc(v.titulo)}" loading="lazy"><span class="play">▶</span></div>
   <p style="margin-top:8px"><b>${esc(v.titulo)}</b>${v.resumo ? `<br><span class="sub">${esc(v.resumo)}</span>` : ''}<br><a href="https://youtu.be/${v.id}" target="_blank" rel="noopener" onclick="rastrear('podcast-youtube')">Assistir no YouTube →</a></p>`;
@@ -343,7 +364,8 @@ async function telaInicioSite() {
     <div class="acts"><a class="btn" href="#consulta" style="flex:1 1 100%">🔎 Consultar meu processo</a></div></div>
   <div class="card"><h2>Áreas de atuação</h2><div class="areas">${AREAS.map(([t, d]) => `<div><b>${t}</b><span class="sub">${d}</span></div>`).join('')}</div><p style="margin-top:12px"><a href="#quem-somos">Conheça a minha trajetória →</a></p></div>
   ${VIDEOS.length ? `<div class="card"><h2>🎙️ Podcast</h2>${videoHtml(VIDEOS[0])}</div>` : ''}
-  ${ns.length ? `<div class="card"><h2>Notícias</h2>${ns.map(postHtml).join('')}<p><a href="#noticias">Ver todas as notícias →</a></p></div>` : ''}`;
+  ${ns.length ? `<div class="card"><h2>Notícias</h2>${ns.map(postHtml).join('')}<p><a href="#noticias">Ver todas as notícias →</a></p></div>` : ''}
+  ${redesHtml()}`;
 }
 function telaQuemSomos() {
   setFab(MSG_PADRAO);
