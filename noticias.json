@@ -1,5 +1,13 @@
 [
  {
+  "id": "2026-11-17-bpc-nao-pode-contribuir-facultativo-baixa-renda",
+  "data": "2026-11-17",
+  "titulo": "Quem recebe BPC não pode pagar o INSS como baixa renda (5%)",
+  "texto": "Quem recebe o BPC/LOAS pode contribuir para o INSS, mas não na modalidade de facultativo de baixa renda, com alíquota de 5%. Em 16/10/2026, a Turma Regional de Uniformização dos Juizados Especiais Federais da 4ª Região decidiu que o BPC conta como renda própria e, por isso, os recolhimentos de 5% feitos nesse período não são validados. A decisão é regional, mas segue o mesmo entendimento que o INSS e a TNU já aplicam: o facultativo de baixa renda não pode ter renda própria de nenhuma natureza.\nHá correção. Daqui para frente, a contribuição pode ser feita como facultativo comum, de 11% ou 20%, sem perder o BPC. Para os meses já pagos em 5%, é possível complementar a diferença, com juros, pelo cálculo de complementação oferecido pelo Meu INSS ou pela Central 135. Antes de pagar, vale conferir no extrato do CNIS quais meses estão pendentes e qual alíquota faz sentido para o benefício que se pretende pedir.",
+  "fonte": "https://www.trf4.jus.br/trf4/controlador.php?acao=noticia_visualizar&id_noticia=30593",
+  "fonteNome": "TRF4 – Recebimento de BPC impede enquadramento como segurado facultativo sem renda própria"
+ },
+ {
   "id": "2026-11-16-14-salario-inss-nao-aprovado-2026",
   "data": "2026-11-16",
   "titulo": "14º salário do INSS: não há pagamento previsto em 2026",
