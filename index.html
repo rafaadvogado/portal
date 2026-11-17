@@ -80,6 +80,7 @@ footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px
 .appbox[open] summary em{display:none}
 .appbox summary::-webkit-details-marker{display:none}
 .appcorpo{padding:0 16px 14px}.appcorpo p{margin:.5em 0}
+.lista{margin:8px 0 6px 20px;padding:0}.lista li{margin:6px 0;line-height:1.5}
 </style>
 </head>
 <body>
@@ -320,7 +321,7 @@ const AREAS = [
   ['Direito Previdenciário', 'Aposentadorias, pensão por morte, auxílios por incapacidade, salário-maternidade, revisões e planejamento previdenciário.'],
   ['Direito da Assistência Social', 'Benefício de Prestação Continuada (BPC/LOAS) para pessoa idosa e pessoa com deficiência.'],
   ['Direito da Saúde', 'Acesso a tratamentos, medicamentos e direitos de pacientes perante o SUS e planos de saúde.'],
-  ['Direito Público – Servidores', 'Aposentadoria e pensão do servidor, abono de permanência e cobrança de salários, férias, 13º e adicionais não pagos pelo Estado ou Município.']
+  ['Direito Público – Servidores', 'Aposentadoria e pensão do servidor, abono de permanência, cobrança de salários, férias, 13º e adicionais não pagos pelo Estado ou Município, licença-prêmio, progressões e contagem do tempo do INSS.']
 ];
 const cartaoHtml = () => `<div class="card"><h2>Meu cartão</h2>
   <img class="cartao" src="cartao.jpg" alt="Cartão de visita de Rafael de Mello Souza, advogado, OAB/SP 352.797, WhatsApp (14) 99611-9228, e-mail rafaelmsouza@adv.oabsp.org.br">
@@ -352,6 +353,17 @@ function telaQuemSomos() {
   <p>Atuo com o <b>Direito Previdenciário desde 2008</b> e exerço a <b>advocacia desde 2014</b>. São muitos anos dedicados a quem precisa do INSS: pessoas que buscam a aposentadoria, um auxílio por incapacidade, a pensão de um familiar ou o BPC/LOAS.</p>
   <p>O meu trabalho é explicar cada etapa com clareza, cuidar dos prazos com rigor e manter o cliente informado do começo ao fim, tanto no pedido administrativo no INSS quanto no processo judicial.</p>
   <h2 style="margin-top:18px">Áreas de atuação</h2><div class="areas">${AREAS.map(([t, d]) => `<div><b>${t}</b><span class="sub">${d}</span></div>`).join('')}</div>
+  <h2 style="margin-top:18px">Servidores públicos</h2>
+  <p>Também atendo <b>servidores públicos estaduais e municipais</b>, ativos e aposentados, e seus pensionistas, nas questões com o Estado, o Município e os regimes próprios de previdência:</p>
+  <ul class="lista">
+    <li><b>Aposentadoria do servidor:</b> análise das regras de transição, cálculo e pedido no regime próprio, além da revisão de aposentadorias já concedidas.</li>
+    <li><b>Pensão por morte</b> de servidor, para cônjuge, companheiro(a) e filhos.</li>
+    <li><b>Abono de permanência</b> para quem já pode se aposentar e continua trabalhando.</li>
+    <li><b>Valores não pagos:</b> salários atrasados, férias e 1/3, 13º, adicionais (insalubridade, tempo de serviço, noturno) e diferenças de reajuste ou de piso.</li>
+    <li><b>Licença-prêmio</b> não usufruída e sua conversão em dinheiro na aposentadoria, quando a lei permite.</li>
+    <li><b>Progressões e promoções</b> na carreira que não foram aplicadas.</li>
+    <li><b>Contagem recíproca:</b> uso do tempo de contribuição ao INSS no regime próprio (e o contrário), com a Certidão de Tempo de Contribuição.</li>
+  </ul>
   <h2 style="margin-top:18px">Como funciona o atendimento</h2>
   <p>O primeiro contato pode ser feito pelo WhatsApp. Os clientes acompanham o andamento do processo por aqui mesmo, na área <a href="#consulta">Consultar processo</a>, com número do processo, CPF e senha.</p></div>
   ${cartaoHtml()}`;
