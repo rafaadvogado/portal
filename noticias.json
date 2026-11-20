@@ -1,5 +1,13 @@
 [
  {
+  "id": "2026-11-20-inss-calendario-pagamento-novembro-biometria",
+  "data": "2026-11-20",
+  "titulo": "Pagamento do INSS de novembro começa na terça (24); falta de biometria não bloqueia benefício",
+  "texto": "A folha de novembro do INSS começa a ser paga na terça-feira, 24/11, e vai até 7/12. Para quem recebe até um salário mínimo, a data segue o último número do benefício antes do traço: final 1 recebe em 24/11, final 2 em 25/11, final 3 em 26/11, final 4 em 27/11, final 5 em 30/11, final 6 em 1º/12, final 7 em 2/12, final 8 em 3/12, final 9 em 4/12 e final 0 em 7/12. Acima de um salário mínimo, os pagamentos vão de 1º/12 (finais 1 e 6) a 7/12 (finais 5 e 0).\nQuem passou a receber benefício a partir de maio de 2026 e não entrou na antecipação de abril e maio recebe o 13º proporcional junto com essa folha, em parcela única.\nO INSS também reforçou que não existe bloqueio de benefícios ativos por falta de cadastro biométrico: a biometria é exigida em novos pedidos feitos desde 21/11/2025 (com exceções, como salário-maternidade, benefícios por incapacidade e pensão por morte) e na contratação de empréstimo consignado. Mensagens que falam em prazo para evitar bloqueio são falsas e podem ser tentativa de golpe. A data e o valor podem ser conferidos no Meu INSS, em \"Extrato de Pagamento\", ou pela Central 135.",
+  "fonte": "https://www.gov.br/inss/",
+  "fonteNome": "INSS – Portal Gov.br (calendário e nota sobre biometria)"
+ },
+ {
   "id": "2026-11-19-inss-exigencia-30-dias-portaria-1363",
   "data": "2026-11-19",
   "titulo": "INSS: quem recebe exigência tem 30 dias para entregar documentos",
