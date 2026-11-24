@@ -24,7 +24,7 @@ nav{background:#1e3d78;display:flex;overflow-x:auto;padding:0 8px}nav a{color:#d
 main{max-width:720px;margin:0 auto;padding:22px 16px 110px}article,.card{background:#fff;border:1px solid #e3dccb;border-radius:16px;padding:22px}
 h1{font-family:Georgia,serif;color:#0f1e3a;font-size:28px;line-height:1.25;margin:4px 0 10px}h2{font-family:Georgia,serif;color:#0f1e3a;font-size:20px;margin:0 0 4px}
 .d{color:#5d6676;font-size:14px;font-weight:600}.sub{color:#5d6676;font-size:14px}.btn{display:inline-block;background:#1f9d55;color:#fff;text-decoration:none;font-weight:700;padding:12px 18px;border-radius:10px;margin:10px 8px 0 0}
-.btn.s{background:#fff;color:#0f1e3a;border:1px solid #e3dccb}.lista a{text-decoration:none}.lista div{border-top:1px solid #e3dccb;padding:14px 0}.lista div:first-child{border-top:0}
+.btn.s{background:#fff;color:#0f1e3a;border:1px solid #e3dccb}.lista a{text-decoration:none}.lista div{border-top:1px solid #e3dccb;padding:14px 0}.lista div:first-child{border-top:0}.lista h2.mes{font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:#8a6d2b;margin:22px 0 4px;padding-top:10px;border-top:2px solid #e3dccb}.lista h2.mes:first-child{margin-top:4px}
 footer{text-align:center;font-size:13px;color:#5d6676;padding:10px 16px 30px}"""
 
 
@@ -69,10 +69,19 @@ def main():
 <article><div class="d">{d[8:10]}/{d[5:7]}/{d[:4]} · Notícias</div><h1>{e(n['titulo'])}</h1>{corpo}{fonte}
 <a class="btn" href="{wa}" target="_blank" rel="noopener" data-umami-event="whatsapp">💬 Tirar dúvida no WhatsApp</a><a class="btn s" href="/noticias/">Ver todas as notícias</a></article>""" + ROD
         open(os.path.join(pasta, n['id'] + '.html'), 'w', encoding='utf-8').write(pag)
-    lista = ''.join(f'<div><span class="d">{n["data"][8:10]}/{n["data"][5:7]}/{n["data"][:4]}</span><h2><a href="/noticias/{n["id"]}.html">{e(n["titulo"])}</a></h2><span class="sub">{e(resumo(n["texto"], 180))}</span></div>' for n in ns)
+    MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+    lista, mes = '', ''
+    for n in ns:
+        if n['data'][:7] != mes:
+            mes = n['data'][:7]
+            qt = sum(1 for x in ns if x['data'][:7] == mes)
+            lista += f'<h2 class="mes" id="{mes}">{MESES[int(mes[5:7]) - 1]} de {mes[:4]} <span class="sub">· {qt} notícia{"s" if qt > 1 else ""}</span></h2>'
+        lista += f'<div><span class="d">{n["data"][8:10]}/{n["data"][5:7]}/{n["data"][:4]}</span><h2><a href="/noticias/{n["id"]}.html">{e(n["titulo"])}</a></h2><span class="sub">{e(resumo(n["texto"], 180))}</span></div>'
+    meses = sorted({n['data'][:7] for n in ns}, reverse=True)
+    indice = ('<p class="sub">Arquivo: ' + ' · '.join(f'<a href="#{m}">{MESES[int(m[5:7]) - 1]}/{m[:4]}</a>' for m in meses) + '</p>') if len(meses) > 1 else ''
     open(os.path.join(pasta, 'index.html'), 'w', encoding='utf-8').write(
-        cab('Notícias sobre INSS e Direito Previdenciário | Rafael de Mello Souza – Advogado', 'Notícias curtas sobre INSS, aposentadorias, BPC/LOAS e Direito Previdenciário, publicadas toda segunda, quarta e sexta pelo advogado Rafael de Mello Souza (OAB/SP 352.797).', f'{SITE}/noticias/')
-        + f'<div class="card"><h1>Notícias</h1><p class="sub">INSS e Direito Previdenciário, toda segunda, quarta e sexta.</p><div class="lista">{lista}</div></div>' + ROD)
+        cab('Notícias sobre INSS e Direito Previdenciário | Rafael de Mello Souza – Advogado', 'Notícias curtas sobre INSS, aposentadorias, BPC/LOAS e Direito Previdenciário, publicadas de segunda a sexta pelo advogado Rafael de Mello Souza (OAB/SP 352.797).', f'{SITE}/noticias/')
+        + f'<div class="card"><h1>Notícias</h1><p class="sub">INSS e Direito Previdenciário, de segunda a sexta.</p>{indice}<div class="lista">{lista}</div></div>' + ROD)
     priv = os.path.join(RAIZ, 'ferramentas', 'privacidade.html')
     if os.path.exists(priv):
         open(os.path.join(RAIZ, 'privacidade.html'), 'w', encoding='utf-8').write(
