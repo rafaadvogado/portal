@@ -80,8 +80,8 @@ def main():
     meses = sorted({n['data'][:7] for n in ns}, reverse=True)
     indice = ('<p class="sub">Arquivo: ' + ' · '.join(f'<a href="#{m}">{MESES[int(m[5:7]) - 1]}/{m[:4]}</a>' for m in meses) + '</p>') if len(meses) > 1 else ''
     open(os.path.join(pasta, 'index.html'), 'w', encoding='utf-8').write(
-        cab('Notícias sobre INSS e Direito Previdenciário | Rafael de Mello Souza – Advogado', 'Notícias curtas sobre INSS, aposentadorias, BPC/LOAS e Direito Previdenciário, publicadas de segunda a sexta pelo advogado Rafael de Mello Souza (OAB/SP 352.797).', f'{SITE}/noticias/')
-        + f'<div class="card"><h1>Notícias</h1><p class="sub">INSS e Direito Previdenciário, de segunda a sexta.</p>{indice}<div class="lista">{lista}</div></div>' + ROD)
+        cab('Notícias sobre INSS, Previdência e Direito Público | Rafael de Mello Souza – Advogado', 'Notícias curtas sobre INSS, aposentadorias, BPC/LOAS, previdência dos servidores públicos e Direito Público, publicadas todos os dias pelo advogado Rafael de Mello Souza (OAB/SP 352.797).', f'{SITE}/noticias/')
+        + f'<div class="card"><h1>Notícias</h1><p class="sub">INSS, previdência dos servidores públicos e direito público, todos os dias.</p>{indice}<div class="lista">{lista}</div></div>' + ROD)
     priv = os.path.join(RAIZ, 'ferramentas', 'privacidade.html')
     if os.path.exists(priv):
         open(os.path.join(RAIZ, 'privacidade.html'), 'w', encoding='utf-8').write(

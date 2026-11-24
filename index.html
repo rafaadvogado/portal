@@ -350,7 +350,7 @@ const postHtml = (n, aberta) => `<div class="post${aberta ? ' aberta' : ''}" id=
 /* Podcast / vídeos do YouTube (o mais recente primeiro). O vídeo só carrega quando a pessoa toca em "play". */
 const VIDEOS = [{ id: 'LKsB1FmF6F0', titulo: 'Aposentadoria Especial – Sem idade mínima', resumo: 'O STF derrubou a idade mínima de 55, 58 e 60 anos da aposentadoria especial. No episódio: o que mudou, o que continua igual e quais profissões podem ser atingidas.' }];
 const REDES = [
-  { c: 'ig', nome: 'Instagram', user: '@rafaadvogado', url: 'https://www.instagram.com/rafaadvogado/', desc: 'Notícias do INSS todos os dias úteis, em vídeo e nos stories.', img: 'redes/ultimo.jpg', acao: 'Seguir no Instagram' },
+  { c: 'ig', nome: 'Instagram', user: '@rafaadvogado', url: 'https://www.instagram.com/rafaadvogado/', desc: 'Notícias de previdência e direito público todos os dias, em vídeo e nos stories.', img: 'redes/ultimo.jpg', acao: 'Seguir no Instagram' },
   { c: 'tt', nome: 'TikTok', user: '@rafael.advogado5', url: 'https://www.tiktok.com/@rafael.advogado5', desc: 'Vídeos curtos explicando seus direitos no INSS.', img: 'redes/story.jpg', acao: 'Seguir no TikTok' },
   { c: 'yt', nome: 'YouTube', user: '@rafaadvogado', url: 'https://www.youtube.com/@rafaadvogado', desc: 'Podcast e vídeos sobre aposentadoria e benefícios.', img: () => VIDEOS.length ? `https://i.ytimg.com/vi/${VIDEOS[0].id}/hqdefault.jpg` : 'redes/ultimo.jpg', acao: 'Ver no YouTube' }
 ];
@@ -402,7 +402,7 @@ async function telaNoticias(id) {
   const meses = [...new Set(ns.map(n => n.data.slice(0, 7)))];
   const lista = N_MES ? ns.filter(n => n.data.startsWith(N_MES)) : ns;
   const vis = lista.slice(0, N_QTD);
-  $('#main').innerHTML = `<div class="card"><h1>Notícias</h1><div class="sub">Novidades sobre INSS e Direito Previdenciário, de segunda a sexta.</div>
+  $('#main').innerHTML = `<div class="card"><h1>Notícias</h1><div class="sub">Novidades sobre INSS, previdência dos servidores públicos e direito público, todos os dias.</div>
   ${meses.length > 1 ? `<div class="meses"><button class="${N_MES ? '' : 'on'}" onclick="filtrarMes('')">Recentes</button>${meses.map(m => `<button class="${N_MES === m ? 'on' : ''}" onclick="filtrarMes('${m}')">${nomeMes(m)}</button>`).join('')}</div>` : ''}
   ${N_MES ? `<h2 style="margin-top:10px">${nomeMes(N_MES)} · ${lista.length} notícia${lista.length === 1 ? '' : 's'}</h2>` : ''}
   ${vis.length ? vis.map(n => postHtml(n, alvo && n.id === id)).join('') : '<p class="sub">Em breve.</p>'}
