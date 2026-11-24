@@ -62,7 +62,7 @@ dt{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.5px
 .proc{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px}.proc b{display:block;color:var(--navy);margin:6px 0 2px}.proc .res{display:block;font-size:14px;margin-top:6px;color:var(--ink)}.proc:active{background:var(--paper)}
 select{width:100%;font-size:17px;padding:12px 14px;border:1px solid #cfd6e2;border-radius:10px;background:#fff;color:var(--ink)}
 .ag{background:#fff7e6;border:1px solid #f0d9a8;border-radius:10px;padding:10px 12px;margin-top:8px}
-.priv{font-size:13px;color:var(--mute);margin-top:14px}
+.priv{font-size:13px;color:var(--mute);margin-top:14px}.alerta{background:#fff7e6;border:1px solid #f0d49a;border-radius:16px;padding:18px 20px;margin-bottom:18px}.alerta h2{margin:0 0 6px;font-size:19px;color:#7a4b00}.alerta p{margin:0 0 12px;color:#4a3a1a}.golpes h2{margin-top:22px}.golpes ul,.golpes ol{padding-left:20px;margin:6px 0}.golpes li{margin:6px 0}.canais{display:grid;gap:8px;margin:10px 0}.canais div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px}.canais b{display:block;color:var(--navy)}.nunca{background:#fdecec;border:1px solid #f2b8b8;border-radius:12px;padding:12px 16px;margin:12px 0}.nunca b{color:#8a1c1c}
 footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px}
 #fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:50;display:flex;align-items:center;gap:8px;background:var(--wa);color:#fff;border-radius:99px;padding:12px 18px 12px 14px;font-weight:700;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 #fab svg{width:28px;height:28px}
@@ -102,7 +102,7 @@ footer{text-align:center;font-size:13px;color:var(--mute);padding:10px 16px 30px
 <header><img src="icon.png" alt=""><div><div class="n">Rafael de Mello Souza</div><div class="o">Advogado · OAB/SP 352.797</div></div></header>
 <nav id="nav"><a href="#inicio">Início</a><a href="#quem-somos">Quem somos</a><a href="#noticias">Notícias</a><a href="#consulta">Área do cliente</a></nav>
 <main id="main"></main>
-<footer>Rafael de Mello Souza · Advogado · OAB/SP nº 352.797<br>© 2026 Rafael de Mello Souza – Advocacia. Todos os direitos reservados.<br>Site e sistema desenvolvidos por Rafael de Mello Souza.<br>Conteúdo informativo, não constitui consultoria jurídica. Cada caso tem particularidades. · <a href="/privacidade.html">Privacidade</a><br><span id="atu"></span></footer>
+<footer>Rafael de Mello Souza · Advogado · OAB/SP nº 352.797<br>© 2026 Rafael de Mello Souza – Advocacia. Todos os direitos reservados.<br>Site e sistema desenvolvidos por Rafael de Mello Souza.<br>Conteúdo informativo, não constitui consultoria jurídica. Cada caso tem particularidades. · <a href="/privacidade.html">Privacidade</a> · <a href="#golpes">Proteja-se de golpes</a><br><span id="atu"></span></footer>
 <a id="fab" target="_blank" rel="noopener" aria-label="Falar comigo no WhatsApp">
 <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><circle cx="8" cy="11" r="1.4" fill="#1f9d55"/><circle cx="12" cy="11" r="1.4" fill="#1f9d55"/><circle cx="16" cy="11" r="1.4" fill="#1f9d55"/></svg>
 <span>WhatsApp</span></a>
@@ -365,6 +365,7 @@ async function telaInicioSite() {
   const ns = (await noticias()).slice(0, 3);
   $('#main').innerHTML = `${cartaoHtml()}<div class="hero"><h1>Advocacia previdenciária e de direito público</h1><p>INSS, BPC/LOAS, servidores públicos e direito à saúde. Atendimento presencial e pelo WhatsApp.</p>
     <div class="acts"><a class="btn" href="#consulta" style="flex:1 1 100%">🔎 Consultar meu processo</a></div></div>
+  <div class="alerta"><h2>🛡️ Cuidado com golpes</h2><p>Recebeu mensagem em meu nome pedindo dinheiro para liberar valores de processo? Pare e confira antes de pagar.</p><a class="btn" href="#golpes" style="width:100%">Como identificar um golpe →</a></div>
   ${redesHtml()}
   <div class="card"><h2>Áreas de atuação</h2><div class="areas">${AREAS.map(([t, d]) => `<div><b>${t}</b><span class="sub">${d}</span></div>`).join('')}</div><p style="margin-top:12px"><a href="#quem-somos">Conheça a minha trajetória →</a></p></div>
   ${ns.length ? `<div class="card"><h2>Notícias</h2><div class="nlist">${ns.map(n => `<a href="#noticias/${encodeURIComponent(n.id)}"><span class="d">${fd(n.data)}</span><b>${esc(n.titulo)}</b></a>`).join('')}</div><p style="margin-top:10px"><a href="#noticias">Ver todas as notícias →</a></p></div>` : ''}
@@ -410,6 +411,58 @@ async function telaNoticias(id) {
   if (alvo) { const e = document.getElementById('n-' + id); e && e.scrollIntoView() }
 }
 function filtrarMes(m) { N_MES = m; N_QTD = 10; if (location.hash !== '#noticias') { history.replaceState(null, '', '#noticias') } telaNoticias(); window.scrollTo(0, 0) }
+function telaGolpes() {
+  setFab('Olá, Dr. Rafael! Recebi uma mensagem em seu nome e quero confirmar se é verdadeira.');
+  $('#main').innerHTML = `<div class="card golpes"><h1>🛡️ Proteja-se de golpes</h1>
+  <p>Golpistas têm usado o nome, a foto e até números de processos verdadeiros de advogados para pedir dinheiro aos clientes. Também é comum o golpe em nome do INSS. Veja como se proteger.</p>
+  <div class="nunca"><b>Eu nunca:</b><ul>
+    <li>peço pagamento de taxa, custa, imposto ou "alvará" para liberar valores do seu processo;</li>
+    <li>peço depósito ou Pix em conta de outra pessoa ou de empresa desconhecida;</li>
+    <li>peço senhas (gov.br, Meu INSS, banco) nem código recebido por SMS;</li>
+    <li>troco de número sem avisar pessoalmente ou pelos canais abaixo;</li>
+    <li>apresso você com "é só hoje" ou "senão perde o dinheiro".</li>
+  </ul></div>
+  <h2>Meus canais oficiais</h2>
+  <div class="canais">
+    <div><b>WhatsApp e telefone</b>${ME.tel} – é o único número do escritório.</div>
+    <div><b>E-mail</b>${ME.email}</div>
+    <div><b>Site</b>rafaelmsouza.adv.br – a consulta do seu processo fica na <a href="#consulta">Área do cliente</a>.</div>
+    <div><b>Redes sociais</b>Instagram e YouTube @rafaadvogado · TikTok @rafael.advogado5 (só conteúdo informativo; não trato de processos por mensagem nas redes).</div>
+  </div>
+  <h2>Como verificar se é golpe</h2>
+  <ol>
+    <li><b>Desconfie de qualquer pedido de dinheiro</b> ligado ao processo, mesmo com o meu nome, a minha foto e os seus dados corretos.</li>
+    <li><b>Ligue para o número oficial</b> (${ME.tel}) e confirme por voz antes de pagar ou enviar qualquer coisa. Não use o número que mandou a mensagem.</li>
+    <li><b>Consulte o seu processo</b> na <a href="#consulta">Área do cliente</a> deste site ou no site do tribunal: valores liberados aparecem no processo.</li>
+    <li><b>Confira o nome de quem vai receber</b> antes de confirmar um Pix. Se não for quem você espera, cancele.</li>
+    <li><b>Assunto do INSS?</b> Confirme só pelo app ou site Meu INSS ou pela Central 135. O INSS não manda link por SMS ou WhatsApp pedindo dados ou senha.</li>
+    <li><b>Para conferir um advogado</b>, use o Cadastro Nacional dos Advogados da OAB (cna.oab.org.br).</li>
+  </ol>
+  <h2>Golpes mais comuns</h2>
+  <ul>
+    <li><b>Falso advogado:</b> alguém com a foto e o nome do advogado avisa que "o processo foi ganho" e pede uma taxa para liberar o dinheiro.</li>
+    <li><b>Falso funcionário do tribunal ou do INSS:</b> ligação ou mensagem dizendo que há valores a receber, pedindo dados, senha ou pagamento.</li>
+    <li><b>Número novo:</b> "troquei de número, salve este" – e logo depois vem um pedido de dinheiro.</li>
+    <li><b>Links falsos:</b> SMS ou WhatsApp com link para "atualizar cadastro", "biometria" ou "prova de vida", que rouba dados e senhas.</li>
+    <li><b>Empréstimo consignado e revisões "milagrosas":</b> ofertas por telefone pedindo a sua senha do gov.br ou uma "antecipação".</li>
+    <li><b>Falso suporte:</b> pedido para instalar um aplicativo no celular "para ajudar" – ele dá acesso total ao aparelho.</li>
+  </ul>
+  <h2>Caiu em um golpe? Aja rápido</h2>
+  <ol>
+    <li>Ligue <b>imediatamente</b> para o seu banco e peça a contestação do Pix pelo <b>MED</b> (Mecanismo Especial de Devolução) e o bloqueio dos valores.</li>
+    <li>Registre um <b>boletim de ocorrência</b> (pode ser pela delegacia eletrônica).</li>
+    <li>Troque as senhas do gov.br, do banco e do e-mail, e avise seus contatos.</li>
+    <li>Fale comigo pelo número oficial para eu conferir o que de fato aconteceu no seu processo.</li>
+  </ol>
+  <div class="acts" style="margin-top:16px"><a class="btn wa" href="${waLink('Olá, Dr. Rafael! Recebi uma mensagem em seu nome e quero confirmar se é verdadeira.')}" target="_blank" rel="noopener" onclick="rastrear('golpes-whatsapp')" style="flex:1 1 100%">💬 Confirmar uma mensagem no WhatsApp oficial</a><button class="btn" style="flex:1 1 100%" onclick="compartilharGolpes()">📤 Compartilhar este alerta</button></div>
+  <p class="priv">Conteúdo informativo. Em caso de dúvida, não pague nada antes de confirmar pelos canais oficiais.</p></div>`;
+}
+function compartilharGolpes() {
+  rastrear('golpes-compartilhar');
+  const url = 'https://rafaelmsouza.adv.br/#golpes', t = 'Cuidado com golpes em nome de advogados e do INSS: veja como identificar e se proteger.';
+  if (navigator.share) navigator.share({ title: 'Proteja-se de golpes', text: t, url }).catch(() => { });
+  else location.href = 'https://wa.me/?text=' + encodeURIComponent(t + ' ' + url);
+}
 function rota() {
   setTimeout(() => rastrear(), 0);
   const h = (location.hash || '#inicio').slice(1), [r, arg] = h.split('/');
@@ -417,6 +470,7 @@ function rota() {
   if (r === 'consulta') telaConsulta();
   else if (r === 'cadastro') telaCadastro();
   else if (r === 'quem-somos') telaQuemSomos();
+  else if (r === 'golpes') telaGolpes();
   else if (r === 'noticias') { if (!arg) { N_MES = ''; N_QTD = 10 } telaNoticias(arg) }
   else telaInicioSite();
   if (r !== 'noticias' || !arg) window.scrollTo(0, 0);
