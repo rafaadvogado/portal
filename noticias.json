@@ -1,5 +1,13 @@
 [
  {
+  "id": "2026-11-26-consignado-inss-confirmacao-meu-inss-portabilidade",
+  "data": "2026-11-26",
+  "titulo": "Consignado do INSS: empréstimo e portabilidade só valem depois da confirmação no Meu INSS",
+  "texto": "Aposentados, pensionistas e quem recebe o BPC precisam confirmar no Meu INSS o empréstimo consignado contratado com o banco. Segundo o serviço oficial do gov.br, a confirmação deve ser feita em até 5 dias depois da contratação, e o dinheiro só é liberado depois dela. O caminho é entrar no aplicativo ou no site Meu INSS com a conta gov.br, tocar em \"Do que você precisa?\" e buscar \"Confirmar Empréstimo\". Quem tiver dificuldade pode ligar para a Central 135.\nDesde 18/11/2026, com a Instrução Normativa PRES/INSS nº 213/2026, a portabilidade – a troca do empréstimo para outro banco – também passou a exigir essa confirmação, com biometria facial. Sem a confirmação no prazo, o pedido não segue e o contrato continua no banco de origem. A etapa existe para evitar contratações feitas sem o conhecimento do beneficiário: se aparecer no Meu INSS um empréstimo que você não pediu, não confirme e procure o banco e os canais oficiais.",
+  "fonte": "https://www.gov.br/pt-br/servicos/confirmar-emprestimo-consignado",
+  "fonteNome": "gov.br – Confirmar Empréstimo Consignado (INSS)"
+ },
+ {
   "id": "2026-11-25-stf-servidor-aposentado-doenca-grave-duplo-teto-adi-6336",
   "data": "2026-11-25",
   "titulo": "Servidor aposentado com doença grave: STF mantém fim do \"duplo teto\" na contribuição",
