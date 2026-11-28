@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://rafaelmsouza.adv.br/</loc><lastmod>2026-11-27</lastmod><priority>1.0</priority></url>
-  <url><loc>https://rafaelmsouza.adv.br/noticias/</loc><lastmod>2026-11-27</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rafaelmsouza.adv.br/</loc><lastmod>2026-11-28</lastmod><priority>1.0</priority></url>
+  <url><loc>https://rafaelmsouza.adv.br/noticias/</loc><lastmod>2026-11-28</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-28-expectativa-de-vida-76-9-fator-previdenciario.html</loc><lastmod>2026-11-28</lastmod><priority>0.6</priority></url>
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-27-stf-piso-nacional-professores-sem-lei-local.html</loc><lastmod>2026-11-27</lastmod><priority>0.6</priority></url>
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-26-consignado-inss-confirmacao-meu-inss-portabilidade.html</loc><lastmod>2026-11-26</lastmod><priority>0.6</priority></url>
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-25-stf-servidor-aposentado-doenca-grave-duplo-teto-adi-6336.html</loc><lastmod>2026-11-25</lastmod><priority>0.6</priority></url>
@@ -20,5 +21,5 @@
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-10-inss-piso-aposentadoria-2027-1741.html</loc><lastmod>2026-11-10</lastmod><priority>0.6</priority></url>
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-09-inss-biometria-bloqueio-falso.html</loc><lastmod>2026-11-09</lastmod><priority>0.6</priority></url>
   <url><loc>https://rafaelmsouza.adv.br/noticias/2026-11-08-calendario-novembro.html</loc><lastmod>2026-11-08</lastmod><priority>0.6</priority></url>
-  <url><loc>https://rafaelmsouza.adv.br/privacidade.html</loc><lastmod>2026-11-27</lastmod><priority>0.2</priority></url>
+  <url><loc>https://rafaelmsouza.adv.br/privacidade.html</loc><lastmod>2026-11-28</lastmod><priority>0.2</priority></url>
 </urlset>
